@@ -8,12 +8,15 @@
 
 /* Begin PBXBuildFile section */
 		E30C5D961CCA41D700B99D93 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E30C5D951CCA41D700B99D93 /* AppDelegate.swift */; };
-		E30C5D981CCA41D700B99D93 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E30C5D971CCA41D700B99D93 /* ViewController.swift */; };
+		E30C5D981CCA41D700B99D93 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E30C5D971CCA41D700B99D93 /* LoginViewController.swift */; };
 		E30C5D9B1CCA41D700B99D93 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E30C5D991CCA41D700B99D93 /* Main.storyboard */; };
-		E30C5D9E1CCA41D700B99D93 /* On_The_Map.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E30C5D9C1CCA41D700B99D93 /* On_The_Map.xcdatamodeld */; };
 		E30C5DA01CCA41D700B99D93 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E30C5D9F1CCA41D700B99D93 /* Assets.xcassets */; };
 		E30C5DA31CCA41D700B99D93 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E30C5DA11CCA41D700B99D93 /* LaunchScreen.storyboard */; };
 		E30C5DAE1CCA41D700B99D93 /* On_The_MapTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E30C5DAD1CCA41D700B99D93 /* On_The_MapTests.swift */; };
+		E30C5DC01CCE3EE100B99D93 /* UdacityClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E30C5DBF1CCE3EE100B99D93 /* UdacityClient.swift */; };
+		E30C5DC21CCE413500B99D93 /* UdacityConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = E30C5DC11CCE413500B99D93 /* UdacityConstants.swift */; };
+		E30C5DC41CCE649600B99D93 /* UdacityConvenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = E30C5DC31CCE649600B99D93 /* UdacityConvenience.swift */; };
+		E30C5DC61CCEA48800B99D93 /* UdacityUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E30C5DC51CCEA48800B99D93 /* UdacityUser.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,15 +32,18 @@
 /* Begin PBXFileReference section */
 		E30C5D921CCA41D700B99D93 /* On The Map.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "On The Map.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E30C5D951CCA41D700B99D93 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		E30C5D971CCA41D700B99D93 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		E30C5D971CCA41D700B99D93 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		E30C5D9A1CCA41D700B99D93 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		E30C5D9D1CCA41D700B99D93 /* On_The_Map.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = On_The_Map.xcdatamodel; sourceTree = "<group>"; };
 		E30C5D9F1CCA41D700B99D93 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E30C5DA21CCA41D700B99D93 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E30C5DA41CCA41D700B99D93 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E30C5DA91CCA41D700B99D93 /* On The MapTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "On The MapTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E30C5DAD1CCA41D700B99D93 /* On_The_MapTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = On_The_MapTests.swift; sourceTree = "<group>"; };
 		E30C5DAF1CCA41D700B99D93 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E30C5DBF1CCE3EE100B99D93 /* UdacityClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UdacityClient.swift; sourceTree = "<group>"; };
+		E30C5DC11CCE413500B99D93 /* UdacityConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UdacityConstants.swift; sourceTree = "<group>"; };
+		E30C5DC31CCE649600B99D93 /* UdacityConvenience.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UdacityConvenience.swift; sourceTree = "<group>"; };
+		E30C5DC51CCEA48800B99D93 /* UdacityUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UdacityUser.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,13 +85,9 @@
 		E30C5D941CCA41D700B99D93 /* On The Map */ = {
 			isa = PBXGroup;
 			children = (
-				E30C5D951CCA41D700B99D93 /* AppDelegate.swift */,
-				E30C5D971CCA41D700B99D93 /* ViewController.swift */,
-				E30C5D991CCA41D700B99D93 /* Main.storyboard */,
-				E30C5D9F1CCA41D700B99D93 /* Assets.xcassets */,
-				E30C5DA11CCA41D700B99D93 /* LaunchScreen.storyboard */,
-				E30C5DA41CCA41D700B99D93 /* Info.plist */,
-				E30C5D9C1CCA41D700B99D93 /* On_The_Map.xcdatamodeld */,
+				E30C5DBC1CCD330B00B99D93 /* Model */,
+				E30C5DBA1CCA7C5A00B99D93 /* View Controllers */,
+				E30C5DBB1CCA7C6800B99D93 /* Supporting Files */,
 			);
 			path = "On The Map";
 			sourceTree = "<group>";
@@ -97,6 +99,53 @@
 				E30C5DAF1CCA41D700B99D93 /* Info.plist */,
 			);
 			path = "On The MapTests";
+			sourceTree = "<group>";
+		};
+		E30C5DBA1CCA7C5A00B99D93 /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				E30C5D971CCA41D700B99D93 /* LoginViewController.swift */,
+			);
+			name = "View Controllers";
+			sourceTree = "<group>";
+		};
+		E30C5DBB1CCA7C6800B99D93 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				E30C5D951CCA41D700B99D93 /* AppDelegate.swift */,
+				E30C5D991CCA41D700B99D93 /* Main.storyboard */,
+				E30C5D9F1CCA41D700B99D93 /* Assets.xcassets */,
+				E30C5DA11CCA41D700B99D93 /* LaunchScreen.storyboard */,
+				E30C5DA41CCA41D700B99D93 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		E30C5DBC1CCD330B00B99D93 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				E30C5DBD1CCD331300B99D93 /* Clients */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		E30C5DBD1CCD331300B99D93 /* Clients */ = {
+			isa = PBXGroup;
+			children = (
+				E30C5DBE1CCD33B500B99D93 /* Udacity */,
+			);
+			name = Clients;
+			sourceTree = "<group>";
+		};
+		E30C5DBE1CCD33B500B99D93 /* Udacity */ = {
+			isa = PBXGroup;
+			children = (
+				E30C5DBF1CCE3EE100B99D93 /* UdacityClient.swift */,
+				E30C5DC11CCE413500B99D93 /* UdacityConstants.swift */,
+				E30C5DC31CCE649600B99D93 /* UdacityConvenience.swift */,
+				E30C5DC51CCEA48800B99D93 /* UdacityUser.swift */,
+			);
+			name = Udacity;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -202,9 +251,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E30C5D981CCA41D700B99D93 /* ViewController.swift in Sources */,
-				E30C5D9E1CCA41D700B99D93 /* On_The_Map.xcdatamodeld in Sources */,
+				E30C5DC61CCEA48800B99D93 /* UdacityUser.swift in Sources */,
+				E30C5D981CCA41D700B99D93 /* LoginViewController.swift in Sources */,
+				E30C5DC21CCE413500B99D93 /* UdacityConstants.swift in Sources */,
 				E30C5D961CCA41D700B99D93 /* AppDelegate.swift in Sources */,
+				E30C5DC41CCE649600B99D93 /* UdacityConvenience.swift in Sources */,
+				E30C5DC01CCE3EE100B99D93 /* UdacityClient.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -406,19 +458,6 @@
 			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCVersionGroup section */
-		E30C5D9C1CCA41D700B99D93 /* On_The_Map.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				E30C5D9D1CCA41D700B99D93 /* On_The_Map.xcdatamodel */,
-			);
-			currentVersion = E30C5D9D1CCA41D700B99D93 /* On_The_Map.xcdatamodel */;
-			path = On_The_Map.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
-/* End XCVersionGroup section */
 	};
 	rootObject = E30C5D8A1CCA41D700B99D93 /* Project object */;
 }
