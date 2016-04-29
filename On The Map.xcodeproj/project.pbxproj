@@ -17,6 +17,7 @@
 		E30C5DC21CCE413500B99D93 /* UdacityConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = E30C5DC11CCE413500B99D93 /* UdacityConstants.swift */; };
 		E30C5DC41CCE649600B99D93 /* UdacityConvenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = E30C5DC31CCE649600B99D93 /* UdacityConvenience.swift */; };
 		E30C5DC61CCEA48800B99D93 /* UdacityUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E30C5DC51CCEA48800B99D93 /* UdacityUser.swift */; };
+		E30C5DC81CD00A1300B99D93 /* MainTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E30C5DC71CD00A1300B99D93 /* MainTabBarViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +45,7 @@
 		E30C5DC11CCE413500B99D93 /* UdacityConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UdacityConstants.swift; sourceTree = "<group>"; };
 		E30C5DC31CCE649600B99D93 /* UdacityConvenience.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UdacityConvenience.swift; sourceTree = "<group>"; };
 		E30C5DC51CCEA48800B99D93 /* UdacityUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UdacityUser.swift; sourceTree = "<group>"; };
+		E30C5DC71CD00A1300B99D93 /* MainTabBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTabBarViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +107,7 @@
 			isa = PBXGroup;
 			children = (
 				E30C5D971CCA41D700B99D93 /* LoginViewController.swift */,
+				E30C5DC71CD00A1300B99D93 /* MainTabBarViewController.swift */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -254,6 +257,7 @@
 				E30C5DC61CCEA48800B99D93 /* UdacityUser.swift in Sources */,
 				E30C5D981CCA41D700B99D93 /* LoginViewController.swift in Sources */,
 				E30C5DC21CCE413500B99D93 /* UdacityConstants.swift in Sources */,
+				E30C5DC81CD00A1300B99D93 /* MainTabBarViewController.swift in Sources */,
 				E30C5D961CCA41D700B99D93 /* AppDelegate.swift in Sources */,
 				E30C5DC41CCE649600B99D93 /* UdacityConvenience.swift in Sources */,
 				E30C5DC01CCE3EE100B99D93 /* UdacityClient.swift in Sources */,

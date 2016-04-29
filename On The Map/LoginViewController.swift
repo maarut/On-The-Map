@@ -16,6 +16,7 @@ class LoginViewController: UIViewController
     @IBOutlet weak var usernameEntry: UITextField!
     @IBOutlet weak var passwordEntry: UITextField!
     @IBOutlet weak var loginButton: UIButton!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     override func viewDidLoad()
     {
@@ -28,22 +29,27 @@ class LoginViewController: UIViewController
             $0.layer.borderWidth = 1.0
         }
         loginButton.setTitleColor(UIColor.lightTextColor(), forState: .Disabled)
+        addGradientToView()
     }
-
-    override func didReceiveMemoryWarning()
+    
+    override func viewWillAppear(animated: Bool)
     {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        super.viewWillAppear(animated)
+        usernameEntry.text = nil
+        passwordEntry.text = nil
+        loginButton.enabled = false
     }
-
+    
+    override func viewDidAppear(animated: Bool)
+    {
+        super.viewDidAppear(animated)
+        resignFirstResponderForTextFields()
+    }
+    
     @IBAction func labelTapped(sender: UITapGestureRecognizer)
     {
-        for textField in [usernameEntry, passwordEntry] {
-            if textField.isFirstResponder() {
-                textField.resignFirstResponder()
-                return
-            }
-        }
+        if resignFirstResponderForTextFields() { return }
+        if !noAccountLabel.pointInside(sender.locationInView(noAccountLabel), withEvent: nil) { return }
         let rangeOfLink = (noAccountLabel.text! as NSString).rangeOfString("Sign up!")
         if sender.didTapAttributedTextInLabel(noAccountLabel, inRange: rangeOfLink) {
             UIApplication.sharedApplication().openURL(signUpLinkString)
@@ -52,14 +58,63 @@ class LoginViewController: UIViewController
     
     @IBAction func loginTapped(sender: AnyObject)
     {
+        let currentLoginText = loginButton.currentTitle
+        loginButton.enabled = false
+        loginButton.setTitle("", forState: .Normal)
+        activityIndicator.startAnimating()
         UdacityClient.sharedInstance().login(usernameEntry.text!, password: passwordEntry.text!) { (didSucceed, error) in
-            if didSucceed {
-                print("logged in")
-            }
-            else {
-                print(error!)
+            dispatch_async(dispatch_get_main_queue()) {
+                if didSucceed {
+                    self.performSegueWithIdentifier("loggedInSegue", sender: self)
+                }
+                else {
+                    let alertController: UIAlertController
+                    if error?.code == UdacityClient.ResponseKeys.ForbiddenResponseErrorCode {
+                        if let parsedResult = error!.userInfo[UdacityClient.ResponseKeys.ForbiddenResponseKey] as? [String: AnyObject],
+                            let errorMsg = parsedResult[UdacityClient.ResponseKeys.ErrorKey] as? String {
+                            alertController = UIAlertController(title: "Login Error", message: errorMsg, preferredStyle: .Alert)
+                        }
+                        else {
+                            alertController = UIAlertController(title: "Login Error", message: "Invalid credentials submitted. Please check the details and try again.", preferredStyle: .Alert)
+                        }
+                    }
+                    else {
+                        alertController = UIAlertController(title: "Login Error", message: "Login failed to complete. Please try again.", preferredStyle: .Alert)
+                    }
+                    alertController.addAction(UIAlertAction(title: "OK", style: .Default , handler: { _ in
+                        self.dismissViewControllerAnimated(true, completion: nil)
+                    }))
+                    self.presentViewController(alertController, animated: true, completion: nil)
+                }
+                self.loginButton.enabled = true
+                self.activityIndicator.stopAnimating()
+                self.loginButton.setTitle(currentLoginText, forState: .Normal)
             }
         }
+    }
+    
+    @IBAction func desp(sender: AnyObject)
+    {
+        performSegueWithIdentifier("loggedInSegue", sender: self)
+    }
+    
+    private func resignFirstResponderForTextFields() -> Bool
+    {
+        for textField in [usernameEntry, passwordEntry] {
+            if textField.isFirstResponder() {
+                textField.resignFirstResponder()
+                return true
+            }
+        }
+        return false
+    }
+    
+    private func addGradientToView()
+    {
+        let gradient = CAGradientLayer()
+        gradient.frame = view.bounds
+        gradient.colors = [view.backgroundColor!.CGColor, UIColor(red: 1.0, green: 200.0/255.0, blue: 0.0, alpha: 1).CGColor]
+        view.layer.insertSublayer(gradient, atIndex: 0)
     }
 
 }
@@ -73,11 +128,9 @@ extension LoginViewController: UITextFieldDelegate
             passwordEntry.becomeFirstResponder()
             break
         case passwordEntry:
+            passwordEntry.resignFirstResponder()
             if loginButton.enabled {
                 loginTapped(self)
-            }
-            else {
-                passwordEntry.resignFirstResponder()
             }
             break
         default:

@@ -25,6 +25,8 @@ extension UdacityClient {
     struct ResponseKeys {
         static let ForbiddenResponseKey = "UdacityClient.403ForbiddenResponseKey"
         static let ForbiddenResponseErrorCode = 403
+        static let ErrorKey = "error"
+        static let ErrorMessageKey = "contents"
     }
     struct UserLoginResponseKeys {
         static let Account = "account"
