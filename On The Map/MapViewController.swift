@@ -9,8 +9,19 @@
 import UIKit
 import MapKit
 
-class MapViewController: UIViewController, MKMapViewDelegate {
-    
+class MapViewController: UIViewController
+{
     @IBOutlet weak var mapView: MKMapView!
     
+}
+
+extension MapViewController: MKMapViewDelegate {
+    
+}
+
+extension MapViewController: TabBarCommonOperations {
+    func refreshTapped(sender: AnyObject)
+    {
+        print("MapViewController refreshTapped")
+    }
 }

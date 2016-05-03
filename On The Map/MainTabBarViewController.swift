@@ -27,9 +27,9 @@ class MainTabBarViewController: UITabBarController {
         navigationItem.hidesBackButton = true
     }
     
-    override func viewDidAppear(animated: Bool)
+    override func viewWillAppear(animated: Bool)
     {
-        super.viewDidAppear(animated)
+        super.viewWillAppear(animated)
         navigationController?.navigationBarHidden = false
     }
     
@@ -41,7 +41,9 @@ class MainTabBarViewController: UITabBarController {
     
     func refreshTapped(sender: AnyObject)
     {
-        print("refresh")
+        if let selectedVC = selectedViewController as? TabBarCommonOperations {
+            selectedVC.refreshTapped(sender)
+        }
     }
     
     func postLocationTapped(sender: AnyObject)
