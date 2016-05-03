@@ -75,7 +75,7 @@ class LoginViewController: UIViewController
                             alertController = UIAlertController(title: "Login Error", message: errorMsg, preferredStyle: .Alert)
                         }
                         else {
-                            alertController = UIAlertController(title: "Login Error", message: "Invalid credentials submitted. Please check the details and try again.", preferredStyle: .Alert)
+                            alertController = UIAlertController(title: "Login Error", message: "Invalid credentials submitted. Please check the details entered and try again.", preferredStyle: .Alert)
                         }
                     }
                     else {

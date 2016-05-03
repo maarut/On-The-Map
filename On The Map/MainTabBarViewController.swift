@@ -45,7 +45,7 @@ class MainTabBarViewController: UITabBarController {
                     self.navigationController?.popViewControllerAnimated(true)
                 }
                 else {
-                    let alertController = UIAlertController(title: "Logout Error", message: error?.description, preferredStyle: .Alert)
+                    let alertController = UIAlertController(title: "Logout Error", message: error?.localizedDescription, preferredStyle: .Alert)
                     alertController.addAction(UIAlertAction(title: "OK", style: .Default , handler: { _ in
                         self.dismissViewControllerAnimated(true, completion: nil)
                     }))
