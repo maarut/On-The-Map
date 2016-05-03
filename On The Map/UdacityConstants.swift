@@ -10,7 +10,6 @@ import UIKit
 
 extension UdacityClient {
     struct Constants {
-        // MARK: URLs
         static let ApiScheme = "https"
         static let ApiHost = "www.udacity.com"
         static let ApiPath = "/api/"
@@ -28,8 +27,15 @@ extension UdacityClient {
         static let ErrorKey = "error"
         static let ErrorMessageKey = "contents"
     }
+    
     struct UserLoginResponseKeys {
         static let Account = "account"
         static let AccountId = "key"
+    }
+    
+    struct UserDataResponseKeys {
+        static let User = "user"
+        static let FirstName = "first_name"
+        static let LastName = "last_name"
     }
 }

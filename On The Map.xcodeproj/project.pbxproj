@@ -18,6 +18,7 @@
 		E30C5DC41CCE649600B99D93 /* UdacityConvenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = E30C5DC31CCE649600B99D93 /* UdacityConvenience.swift */; };
 		E30C5DC61CCEA48800B99D93 /* UdacityUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E30C5DC51CCEA48800B99D93 /* UdacityUser.swift */; };
 		E30C5DC81CD00A1300B99D93 /* MainTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E30C5DC71CD00A1300B99D93 /* MainTabBarViewController.swift */; };
+		E38306921CD8CB4600C103D2 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E38306911CD8CB4600C103D2 /* MapViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +47,7 @@
 		E30C5DC31CCE649600B99D93 /* UdacityConvenience.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UdacityConvenience.swift; sourceTree = "<group>"; };
 		E30C5DC51CCEA48800B99D93 /* UdacityUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UdacityUser.swift; sourceTree = "<group>"; };
 		E30C5DC71CD00A1300B99D93 /* MainTabBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTabBarViewController.swift; sourceTree = "<group>"; };
+		E38306911CD8CB4600C103D2 /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +110,7 @@
 			children = (
 				E30C5D971CCA41D700B99D93 /* LoginViewController.swift */,
 				E30C5DC71CD00A1300B99D93 /* MainTabBarViewController.swift */,
+				E38306911CD8CB4600C103D2 /* MapViewController.swift */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -261,6 +264,7 @@
 				E30C5D961CCA41D700B99D93 /* AppDelegate.swift in Sources */,
 				E30C5DC41CCE649600B99D93 /* UdacityConvenience.swift in Sources */,
 				E30C5DC01CCE3EE100B99D93 /* UdacityClient.swift in Sources */,
+				E38306921CD8CB4600C103D2 /* MapViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -452,6 +456,7 @@
 				E30C5DB41CCA41D700B99D93 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E30C5DB51CCA41D700B99D93 /* Build configuration list for PBXNativeTarget "On The MapTests" */ = {
 			isa = XCConfigurationList;
@@ -460,6 +465,7 @@
 				E30C5DB71CCA41D700B99D93 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

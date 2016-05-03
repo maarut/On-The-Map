@@ -10,46 +10,18 @@ import Foundation
 
 extension UdacityClient {
     
+    func taskForGETMethod(method: String, parameters: [String: AnyObject], completionHandler: (data: AnyObject?, error: NSError?) -> Void) -> NSURLSessionDataTask
+    {
+        let url = udacityURL(withPathExtension: method)
+        let request = NSURLRequest(URL: url)
+        return dataTaskWithRequest(request, methodName: "taskForGETMethod", completionHandler: completionHandler)
+    }
+    
     func taskForDELETEMethod(method: String, completionHandler: (data: AnyObject?, error: NSError?) -> Void) -> NSURLSessionDataTask
     {
         let url = udacityURL(withPathExtension: method)
         let request = urlRequestForDELETE(url)
-        let task = session.dataTaskWithRequest(request) { (data, response, error) in
-            func sendError(error: String)
-            {
-                let userInfo = [NSLocalizedDescriptionKey: error]
-                completionHandler(data: nil, error: NSError(domain: "taskForDELETEMethod", code: 1, userInfo: userInfo))
-            }
-            
-            guard error == nil else {
-                completionHandler(data: nil, error: error!)
-                return
-            }
-            
-            guard let data = data?.subdataWithRange(NSRange(location: 5, length: (data?.length ?? 5) - 5)) else {
-                sendError("No data was returned by the request!")
-                return
-            }
-            
-            guard let statusCode = (response as? NSHTTPURLResponse)?.statusCode where statusCode >= 200 && statusCode < 300 else {
-                sendError("Status code in the 2xx range not received.")
-                return
-            }
-            
-            let parsedResult: AnyObject!
-            do {
-                parsedResult = try NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments)
-            }
-            catch {
-                parsedResult = nil
-                completionHandler(data: nil, error: (error as NSError))
-                return
-            }
-            
-            completionHandler(data: parsedResult, error: nil)
-            
-        }
-        return task
+        return dataTaskWithRequest(request, methodName: "taskForDELETEMethod", completionHandler: completionHandler)
     }
     
     func taskForPOSTMethod(method: String, parameters: [String: AnyObject], httpBody: [String: AnyObject], completionHandler: (data: AnyObject?, error: NSError?) -> Void) -> NSURLSessionDataTask
@@ -104,11 +76,11 @@ extension UdacityClient {
         return task
     }
     
-    private func udacityURL(withPathExtension withPathExtension: String = "") -> NSURL {
+    private func udacityURL(withPathExtension pathExtension: String = "") -> NSURL {
         let components = NSURLComponents()
         components.scheme = Constants.ApiScheme
         components.host = Constants.ApiHost
-        components.path = Constants.ApiPath + "\(withPathExtension)"
+        components.path = Constants.ApiPath + "\(pathExtension)"
         
         return components.URL!
     }
@@ -153,5 +125,44 @@ extension UdacityClient {
         httpHeaderFields.forEach { request.addValue($1, forHTTPHeaderField: $0) }
         
         return request
+    }
+    
+    private func dataTaskWithRequest(request: NSURLRequest, methodName: String, completionHandler: (data: AnyObject?, error: NSError?) -> Void) -> NSURLSessionDataTask
+    {
+        return session.dataTaskWithRequest(request) { (data, response, error) in
+            func sendError(error: String)
+            {
+                let userInfo = [NSLocalizedDescriptionKey: error]
+                completionHandler(data: nil, error: NSError(domain: methodName, code: 1, userInfo: userInfo))
+            }
+            
+            guard error == nil else {
+                completionHandler(data: nil, error: error!)
+                return
+            }
+            
+            guard let data = data?.subdataWithRange(NSRange(location: 5, length: (data?.length ?? 5) - 5)) else {
+                sendError("No data was returned by the request!")
+                return
+            }
+            
+            guard let statusCode = (response as? NSHTTPURLResponse)?.statusCode where statusCode >= 200 && statusCode < 300 else {
+                sendError("Status code in the 2xx range not received.")
+                return
+            }
+            
+            let parsedResult: AnyObject!
+            do {
+                parsedResult = try NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments)
+            }
+            catch {
+                parsedResult = nil
+                completionHandler(data: nil, error: (error as NSError))
+                return
+            }
+            
+            completionHandler(data: parsedResult, error: nil)
+            
+        }
     }
 }

@@ -10,13 +10,20 @@ import UIKit
 
 class MainTabBarViewController: UITabBarController {
     weak var logoutButton: UIBarButtonItem!
+    weak var postLocationButton: UIBarButtonItem!
+    weak var refreshItemsButton: UIBarButtonItem!
 
     override func viewDidLoad()
     {
         super.viewDidLoad()
         let logoutButton = UIBarButtonItem(title: "Logout", style: .Plain, target: self, action: #selector(logoutTapped(_:)))
+        let refreshItemsButton = UIBarButtonItem(barButtonSystemItem: .Refresh, target: self, action: #selector(refreshTapped(_:)))
+        let postLocationButton = UIBarButtonItem(image: UIImage(named: "pin"), style: .Plain, target: self, action: #selector(postLocationTapped(_:)))
         self.logoutButton = logoutButton
-        navigationItem.setLeftBarButtonItem(logoutButton, animated: true)
+        self.refreshItemsButton = refreshItemsButton
+        self.postLocationButton = postLocationButton
+        navigationItem.setLeftBarButtonItem(logoutButton, animated: false)
+        navigationItem.setRightBarButtonItems([refreshItemsButton, postLocationButton], animated: false)
         navigationItem.hidesBackButton = true
     }
     
@@ -30,6 +37,16 @@ class MainTabBarViewController: UITabBarController {
     {
         super.viewWillDisappear(animated)
         navigationController?.navigationBarHidden = true
+    }
+    
+    func refreshTapped(sender: AnyObject)
+    {
+        print("refresh")
+    }
+    
+    func postLocationTapped(sender: AnyObject)
+    {
+        print("post")
     }
     
     func logoutTapped(sender: AnyObject)
