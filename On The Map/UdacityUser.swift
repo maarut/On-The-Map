@@ -10,6 +10,6 @@ import Foundation
 
 struct UdacityUser {
     var userId: Int
-    var firstName: String?
-    var lastName: String?
+    var firstName: String
+    var lastName: String
 }

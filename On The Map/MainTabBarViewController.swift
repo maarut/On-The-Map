@@ -42,7 +42,18 @@ class MainTabBarViewController: UITabBarController {
     func refreshTapped(sender: AnyObject)
     {
         if let selectedVC = selectedViewController as? TabBarCommonOperations {
-            selectedVC.refreshTapped(sender)
+            ParseClient.sharedInstance().getStudentLocations { (studentLocations, error) in
+                dispatch_async(dispatch_get_main_queue()) {
+                    guard error == nil else {
+                        // TODO: Log error
+                        return
+                    }
+                    if let studentLocations = studentLocations {
+                        (UIApplication.sharedApplication().delegate as? AppDelegate)?.studentLocations = studentLocations
+                    }
+                    selectedVC.refreshTapped(sender)
+                }
+            }
         }
     }
     

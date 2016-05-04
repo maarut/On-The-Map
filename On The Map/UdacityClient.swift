@@ -25,7 +25,7 @@ class UdacityClient {
     func login(username: String, password: String, completionHandler: (Bool, NSError?) -> Void)
     {
         let task = taskForPOSTMethod(Methods.Session, parameters: [:], httpBody: ["udacity": ["username": username, "password": password]]) { (data, error) in
-            func logError(errorString: String) {
+            func sendError(errorString: String) {
                 let error = NSError(domain: "UdacityClient.login", code: 1, userInfo: [NSLocalizedDescriptionKey: errorString])
                 completionHandler(false, error)
             }
@@ -34,15 +34,15 @@ class UdacityClient {
                 return
             }
             guard let data = data as? [String: AnyObject] else {
-                logError("Unable to parse returned JSON object")
+                sendError("Unable to parse returned JSON object")
                 return
             }
             guard let account = data[UserLoginResponseKeys.Account] as? [String: AnyObject] else {
-                logError("key \"\(UserLoginResponseKeys.Account)\" not found in JSON response")
+                sendError("key \"\(UserLoginResponseKeys.Account)\" not found in JSON response")
                 return
             }
             guard let accountId = Int(account[UserLoginResponseKeys.AccountId] as? String ?? "") else {
-                logError("key \"\(UserLoginResponseKeys.AccountId)\" not found in JSON response")
+                sendError("key \"\(UserLoginResponseKeys.AccountId)\" not found in JSON response")
                 return
             }
             self.getUserDataForUserId(accountId) { (user, error) in
@@ -77,7 +77,7 @@ class UdacityClient {
     func getUserDataForUserId(userId: Int, completionHandler: (UdacityUser?, NSError?) -> Void)
     {
         let task = taskForGETMethod("\(Methods.Users)/\(userId)", parameters: [:], completionHandler: { (data, error) in
-            func logError(errorString: String) {
+            func sendError(errorString: String) {
                 let error = NSError(domain: "UdacityClient.getUserData", code: 1, userInfo: [NSLocalizedDescriptionKey: errorString])
                 completionHandler(nil, error)
             }
@@ -86,19 +86,19 @@ class UdacityClient {
                 return
             }
             guard let data = data as? [String: AnyObject] else {
-                logError("Unable to parse returned JSON object")
+                sendError("Unable to parse returned JSON object")
                 return
             }
             guard let user = data[UserDataResponseKeys.User] as? [String: AnyObject] else {
-                logError("key \"\(UserDataResponseKeys.User)\" not found in JSON response")
+                sendError("key \"\(UserDataResponseKeys.User)\" not found in JSON response")
                 return
             }
             guard let firstName = user[UserDataResponseKeys.FirstName] as? String else {
-                logError("key \"\(UserDataResponseKeys.FirstName)\" not found in JSON response")
+                sendError("key \"\(UserDataResponseKeys.FirstName)\" not found in JSON response")
                 return
             }
             guard let lastName = user[UserDataResponseKeys.LastName] as? String else {
-                logError("key \"\(UserDataResponseKeys.LastName)\" not found in JSON response")
+                sendError("key \"\(UserDataResponseKeys.LastName)\" not found in JSON response")
                 return
             }
             let udacityUser = UdacityUser(userId: userId, firstName: firstName, lastName: lastName)

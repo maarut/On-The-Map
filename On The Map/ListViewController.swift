@@ -8,25 +8,40 @@
 
 import UIKit
 
-class ListViewController: UIViewController {
+class ListViewController: UIViewController
+{
+    @IBOutlet weak var tableView: UITableView!
+    var studentLocations: [StudentLocation]?
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+    override func viewWillAppear(animated: Bool)
+    {
+        super.viewWillAppear(animated)
     }
 
 }
 
 extension ListViewController: UITableViewDataSource {
+    
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int
+    {
+        return 1
+    }
+    
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
-        return 4
+        if section == 0 {
+            return studentLocations?.count ?? 0
+        }
+        return 0
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
     {
-        return UITableViewCell()
+        let cell = tableView.dequeueReusableCellWithIdentifier("studentLocation")!
+        if let studentLocation = studentLocations?[indexPath.row] {
+            cell.textLabel?.text = "\(studentLocation.firstName) \(studentLocation.lastName)"
+        }
+        return cell
     }
 }
 
@@ -35,8 +50,10 @@ extension ListViewController: UITableViewDelegate {
 }
 
 extension ListViewController: TabBarCommonOperations {
+    // Must be called on the main thread
     func refreshTapped(sender: AnyObject)
     {
-        print("ListViewController refreshTapped")
+        studentLocations = (UIApplication.sharedApplication().delegate as? AppDelegate)?.studentLocations
+        self.tableView.reloadData()
     }
 }

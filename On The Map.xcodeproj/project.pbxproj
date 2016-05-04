@@ -21,6 +21,10 @@
 		E32053CD1CD913FE00859DB2 /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E32053CC1CD913FE00859DB2 /* ListViewController.swift */; };
 		E32053D01CD9167800859DB2 /* TabBarCommonOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = E32053CF1CD9167800859DB2 /* TabBarCommonOperations.swift */; };
 		E38306921CD8CB4600C103D2 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E38306911CD8CB4600C103D2 /* MapViewController.swift */; };
+		E38306951CD921F600C103D2 /* ParseConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = E38306941CD921F600C103D2 /* ParseConstants.swift */; };
+		E38306971CDA054200C103D2 /* ParseClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E38306961CDA054200C103D2 /* ParseClient.swift */; };
+		E38306991CDA112B00C103D2 /* StudentLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E38306981CDA112B00C103D2 /* StudentLocation.swift */; };
+		E383069B1CDA11D200C103D2 /* ParseConvenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = E383069A1CDA11D200C103D2 /* ParseConvenience.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +56,10 @@
 		E32053CC1CD913FE00859DB2 /* ListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 		E32053CF1CD9167800859DB2 /* TabBarCommonOperations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarCommonOperations.swift; sourceTree = "<group>"; };
 		E38306911CD8CB4600C103D2 /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		E38306941CD921F600C103D2 /* ParseConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParseConstants.swift; sourceTree = "<group>"; };
+		E38306961CDA054200C103D2 /* ParseClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParseClient.swift; sourceTree = "<group>"; };
+		E38306981CDA112B00C103D2 /* StudentLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StudentLocation.swift; sourceTree = "<group>"; };
+		E383069A1CDA11D200C103D2 /* ParseConvenience.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParseConvenience.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -144,6 +152,7 @@
 		E30C5DBD1CCD331300B99D93 /* Clients */ = {
 			isa = PBXGroup;
 			children = (
+				E38306931CD921DC00C103D2 /* Parse */,
 				E30C5DBE1CCD33B500B99D93 /* Udacity */,
 			);
 			name = Clients;
@@ -166,6 +175,17 @@
 				E32053CF1CD9167800859DB2 /* TabBarCommonOperations.swift */,
 			);
 			name = Protocols;
+			sourceTree = "<group>";
+		};
+		E38306931CD921DC00C103D2 /* Parse */ = {
+			isa = PBXGroup;
+			children = (
+				E38306941CD921F600C103D2 /* ParseConstants.swift */,
+				E38306961CDA054200C103D2 /* ParseClient.swift */,
+				E38306981CDA112B00C103D2 /* StudentLocation.swift */,
+				E383069A1CDA11D200C103D2 /* ParseConvenience.swift */,
+			);
+			name = Parse;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -272,10 +292,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				E30C5DC61CCEA48800B99D93 /* UdacityUser.swift in Sources */,
+				E383069B1CDA11D200C103D2 /* ParseConvenience.swift in Sources */,
+				E38306991CDA112B00C103D2 /* StudentLocation.swift in Sources */,
 				E30C5D981CCA41D700B99D93 /* LoginViewController.swift in Sources */,
+				E38306951CD921F600C103D2 /* ParseConstants.swift in Sources */,
 				E30C5DC21CCE413500B99D93 /* UdacityConstants.swift in Sources */,
 				E30C5DC81CD00A1300B99D93 /* MainTabBarViewController.swift in Sources */,
 				E30C5D961CCA41D700B99D93 /* AppDelegate.swift in Sources */,
+				E38306971CDA054200C103D2 /* ParseClient.swift in Sources */,
 				E32053CD1CD913FE00859DB2 /* ListViewController.swift in Sources */,
 				E30C5DC41CCE649600B99D93 /* UdacityConvenience.swift in Sources */,
 				E30C5DC01CCE3EE100B99D93 /* UdacityClient.swift in Sources */,
