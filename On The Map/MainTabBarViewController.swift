@@ -45,7 +45,9 @@ class MainTabBarViewController: UITabBarController {
             ParseClient.sharedInstance().getStudentLocations { (studentLocations, error) in
                 dispatch_async(dispatch_get_main_queue()) {
                     guard error == nil else {
-                        // TODO: Log error
+                        let alertController = UIAlertController(title: "Couldn't refresh data", message: "\(error!.localizedDescription)", preferredStyle: .Alert)
+                        alertController.addAction(UIAlertAction(title: "Okay", style: .Default, handler: { _ in self.dismissViewControllerAnimated(true, completion: nil) }))
+                        self.presentViewController(alertController, animated: true, completion: nil)
                         return
                     }
                     if let studentLocations = studentLocations {
