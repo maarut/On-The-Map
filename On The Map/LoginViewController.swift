@@ -10,8 +10,8 @@ import UIKit
 
 class LoginViewController: UIViewController
 {
-
     private let signUpLinkString = NSURL(string: "https://www.udacity.com/account/auth#!/signup")!
+    
     @IBOutlet weak var noAccountLabel: UILabel!
     @IBOutlet weak var usernameEntry: UITextField!
     @IBOutlet weak var passwordEntry: UITextField!
@@ -79,11 +79,9 @@ class LoginViewController: UIViewController
                         }
                     }
                     else {
-                        alertController = UIAlertController(title: "Login Error", message: "Login failed to complete. Please try again.", preferredStyle: .Alert)
+                        alertController = UIAlertController(title: "Login Error", message: error!.localizedDescription, preferredStyle: .Alert)
                     }
-                    alertController.addAction(UIAlertAction(title: "OK", style: .Default , handler: { _ in
-                        self.dismissViewControllerAnimated(true, completion: nil)
-                    }))
+                    alertController.addAction(UIAlertAction(title: "Okay", style: .Default, handler: { _ in self.dismissViewControllerAnimated(true, completion: nil) } ))
                     self.presentViewController(alertController, animated: true, completion: nil)
                 }
                 self.loginButton.enabled = true

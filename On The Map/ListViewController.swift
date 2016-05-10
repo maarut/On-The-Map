@@ -20,28 +20,12 @@ class ListViewController: UIViewController
             studentLocations = sl
             tableView.reloadData()
         }
-        else {
-            ParseClient.sharedInstance().getStudentLocations { (studentLocations, error) in
-                dispatch_async(dispatch_get_main_queue()) {
-                    guard error == nil else {
-                        let alertController = UIAlertController(title: "Couldn't fetch data", message: "\(error!.localizedDescription)", preferredStyle: .Alert)
-                        alertController.addAction(UIAlertAction(title: "Okay", style: .Default, handler: { _ in self.dismissViewControllerAnimated(true, completion: nil) }))
-                        self.presentViewController(alertController, animated: true, completion: nil)
-                        return
-                    }
-                    if let studentLocations = studentLocations {
-                        (UIApplication.sharedApplication().delegate as? AppDelegate)?.studentLocations = studentLocations
-                        self.studentLocations = studentLocations
-                        self.tableView.reloadData()
-                    }
-                }
-            }
-        }
     }
     
 }
 
-extension ListViewController: UITableViewDataSource {
+extension ListViewController: UITableViewDataSource
+{
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int
     {
@@ -67,7 +51,8 @@ extension ListViewController: UITableViewDataSource {
     }
 }
 
-extension ListViewController: UITableViewDelegate {
+extension ListViewController: UITableViewDelegate
+{
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath)
     {
         if let studentLocation = studentLocations?[indexPath.row] {
@@ -87,10 +72,12 @@ extension ListViewController: UITableViewDelegate {
                 self.presentViewController(alertController, animated: true, completion: nil)
             }
         }
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
 }
 
-extension ListViewController: TabBarCommonOperations {
+extension ListViewController: TabBarCommonOperations
+{
     // Must be called on the main thread
     func refreshTapped(sender: AnyObject)
     {
