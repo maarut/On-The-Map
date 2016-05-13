@@ -31,7 +31,12 @@ class MainTabBarViewController: UITabBarController {
     {
         super.viewWillAppear(animated)
         navigationController?.navigationBarHidden = false
-        refreshTapped(self)
+        StudentDataStore.refreshStudentLocationsWithCompletionHandler { (didSucceed, error) in
+            if !didSucceed { NSLog(error!.localizedDescription); return }
+            if let selectedVC = self.selectedViewController as? TabBarCommonOperations {
+                selectedVC.refreshTapped(self)
+            }
+        }
         
     }
     
@@ -43,19 +48,16 @@ class MainTabBarViewController: UITabBarController {
     
     func refreshTapped(sender: AnyObject)
     {
-        ParseClient.sharedInstance().getStudentLocations { (studentLocations, error) in
+        StudentDataStore.refreshStudentLocationsWithCompletionHandler { (didSucceed, error) in
             dispatch_async(dispatch_get_main_queue()) {
-                guard error == nil else {
+                guard didSucceed else {
                     let alertController = UIAlertController(title: "Couldn't fetch data", message: "\(error!.localizedDescription)", preferredStyle: .Alert)
                     alertController.addAction(UIAlertAction(title: "Okay", style: .Default, handler: { _ in self.dismissViewControllerAnimated(true, completion: nil) }))
                     self.presentViewController(alertController, animated: true, completion: nil)
                     return
                 }
-                if let studentLocations = studentLocations {
-                    (UIApplication.sharedApplication().delegate as? AppDelegate)?.studentLocations = studentLocations
-                }
                 if let selectedVC = self.selectedViewController as? TabBarCommonOperations {
-                    selectedVC.refreshTapped(self)
+                    selectedVC.refreshTapped(sender)
                 }
             }
         }

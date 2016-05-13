@@ -20,7 +20,7 @@ class ParseClient {
         return DispatchOnce.value!
     }
     
-    func getStudentLocations(completionHandler: ([StudentLocation]?, NSError?) -> Void)
+    func getStudentLocations(completionHandler: ([StudentData]?, NSError?) -> Void)
     {
         let options: [String: AnyObject] = [StudentLocationParameters.Limit: 100, StudentLocationParameters.Order: "-\(StudentLocationFields.UpdatedAt)"]
         let task = taskForGETMethod(Methods.StudentLocation, parameters: options) { (data, error) in
@@ -40,9 +40,9 @@ class ParseClient {
                 return
             }
             
-            let studentLocations: [StudentLocation]!
+            let studentLocations: [StudentData]!
             do {
-                studentLocations = try StudentLocation.parseJSONData(results)
+                studentLocations = try StudentData.parseJSONData(results)
             }
             catch {
                 studentLocations = nil

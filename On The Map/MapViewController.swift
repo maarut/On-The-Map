@@ -12,10 +12,11 @@ import CoreLocation
 
 class MapViewController: UIViewController
 {
+    // MARK: - Instance Variables
     @IBOutlet weak var mapView: MKMapView!
-    private var studentLocations: [StudentLocation]?
     private var locationManager = CLLocationManager()
-    
+
+    // MARK: - Overrides
     override func viewDidLoad()
     {
         super.viewDidLoad()
@@ -53,11 +54,15 @@ class MapViewController: UIViewController
         updateLocationOnMap()
     }
 
+    // MARK: - Private Methods
     private func updateLocationOnMap()
     {
-        if let currentLocation = self.locationManager.location, studentLocations = self.studentLocations {
+        let currentLocation = self.locationManager.location
+        if currentLocation != nil && !StudentDataStore.studentData.isEmpty {
             dispatch_async(dispatch_get_main_queue()) {
-                self.mapView.setRegion(self.coordinateRegionForStudentLocations(studentLocations, nearCurrentLocation: currentLocation), animated: true)
+                self.mapView.setRegion(self.coordinateRegionForStudentLocations(
+                    StudentDataStore.studentData, nearCurrentLocation: currentLocation!),
+                                       animated: true)
             }
         }
         else {
@@ -67,7 +72,7 @@ class MapViewController: UIViewController
     
     private func pinsForLocations() -> [MKPointAnnotation]
     {
-        return studentLocations?.map {
+        return StudentDataStore.studentData.map {
             let annotation = MKPointAnnotation()
             annotation.coordinate = CLLocationCoordinate2D(latitude: CLLocationDegrees($0.latitude), longitude: CLLocationDegrees($0.longitude))
             annotation.title = "\($0.firstName) \($0.lastName)"
@@ -76,39 +81,17 @@ class MapViewController: UIViewController
         } ?? []
     }
     
-    private func annotateMapView()
+    private func coordinateRegionForStudentLocations(studentLocations: [StudentData], nearCurrentLocation currentLocation: CLLocation) -> MKCoordinateRegion
     {
-        mapView.addAnnotations(pinsForLocations())
-    }
-    
-    private func coordinateRegionForStudentLocations(studentLocations: [StudentLocation], nearCurrentLocation currentLocation: CLLocation) -> MKCoordinateRegion
-    {
-        let location = MKMapPointForCoordinate(currentLocation.coordinate)
-        let mapCoordinates = studentLocations.map {
-            MKMapPointForCoordinate(CLLocationCoordinate2DMake(CLLocationDegrees($0.latitude), CLLocationDegrees($0.longitude)))
+        let coordinates = StudentDataStore.studentLocationsSurroundingLocation(currentLocation).map {
+            CLLocationCoordinate2D(latitude: CLLocationDegrees($0.latitude), longitude: CLLocationDegrees($0.longitude))
         }
-        let sortedCoordinates = mapCoordinates.sort {
-            let distanceLHS = MKMetersBetweenMapPoints(location, $0)
-            let distanceRHS = MKMetersBetweenMapPoints(location, $1)
-            return distanceLHS < distanceRHS
-        }
-        var currentDistanceCheck = CLLocationDistance(1000000)
-        let filteredCoordinates = sortedCoordinates.filter {
-            let distance = MKMetersBetweenMapPoints(location, $0)
-            if distance < currentDistanceCheck {
-                currentDistanceCheck = distance + 1000000
-                return true
-            }
-            return false
-        }
-        let maxX = filteredCoordinates.maxElement { $0.x < $1.x }?.x ?? 0.0
-        let maxY = filteredCoordinates.maxElement { $0.y < $1.y }?.y ?? 0.0
-        let furthestCoordinate = MKCoordinateForMapPoint(MKMapPointMake(maxX, maxY))
-        let span = MKCoordinateSpanMake(abs(currentLocation.coordinate.latitude - furthestCoordinate.latitude), abs(currentLocation.coordinate.longitude - furthestCoordinate.longitude))
-        return MKCoordinateRegionMake(currentLocation.coordinate, span)
+        return MKCoordinateRegionMake(regionSpanningCoordinates: coordinates, centeringOn: currentLocation.coordinate)
     }
 }
 
+
+// MARK: - CLLocationManagerDelegate Implementation
 extension MapViewController: CLLocationManagerDelegate
 {
     func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus)
@@ -125,6 +108,7 @@ extension MapViewController: CLLocationManagerDelegate
     }
 }
 
+// MARK: - MKMapViewDelegate Implementation
 extension MapViewController: MKMapViewDelegate
 {
     
@@ -171,11 +155,11 @@ extension MapViewController: MKMapViewDelegate
     }
 }
 
+// MARK: - TabBarCommonOperations Implementation
 extension MapViewController: TabBarCommonOperations
 {
     func refreshTapped(sender: AnyObject)
     {
-        studentLocations = (UIApplication.sharedApplication().delegate as? AppDelegate)?.studentLocations
-        annotateMapView()
+        mapView.addAnnotations(pinsForLocations())
     }
 }

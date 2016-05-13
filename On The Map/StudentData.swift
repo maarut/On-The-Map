@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct StudentLocation {
+struct StudentData {
     var objectId: String?
     var uniqueKey: String
     var firstName: String
@@ -18,7 +18,7 @@ struct StudentLocation {
     var latitude: Float
     var longitude: Float
     
-    static func parseJSONData(data: [[String: AnyObject]]) throws -> [StudentLocation]
+    static func parseJSONData(data: [[String: AnyObject]]) throws -> [StudentData]
     {
         return try data.flatMap {
             func throwError(errorMsg: String) throws
@@ -59,7 +59,7 @@ struct StudentLocation {
                 return nil
             }
             
-            return StudentLocation(objectId: objectId, uniqueKey: uniqueKey, firstName: firstName, lastName: lastName, mapString: mapString, mediaURL: mediaURL, latitude: latitude, longitude: longitude)
+            return StudentData(objectId: objectId, uniqueKey: uniqueKey, firstName: firstName, lastName: lastName, mapString: mapString, mediaURL: mediaURL, latitude: latitude, longitude: longitude)
             
         }
     }

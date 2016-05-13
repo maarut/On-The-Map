@@ -11,15 +11,11 @@ import UIKit
 class ListViewController: UIViewController
 {
     @IBOutlet weak var tableView: UITableView!
-    var studentLocations: [StudentLocation]?
     
     override func viewWillAppear(animated: Bool)
     {
         super.viewWillAppear(animated)
-        if let sl = (UIApplication.sharedApplication().delegate as? AppDelegate)?.studentLocations {
-            studentLocations = sl
-            tableView.reloadData()
-        }
+        tableView.reloadData()
     }
     
 }
@@ -35,7 +31,7 @@ extension ListViewController: UITableViewDataSource
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
         if section == 0 {
-            return studentLocations?.count ?? 0
+            return StudentDataStore.studentData.count ?? 0
         }
         return 0
     }
@@ -43,10 +39,9 @@ extension ListViewController: UITableViewDataSource
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
     {
         let cell = tableView.dequeueReusableCellWithIdentifier("studentLocation")!
-        if let studentLocation = studentLocations?[indexPath.row] {
-            cell.textLabel?.text = "\(studentLocation.firstName) \(studentLocation.lastName)"
-            cell.imageView?.image = UIImage(named: "pin")
-        }
+        let studentLocation = StudentDataStore.studentData[indexPath.row]
+        cell.textLabel?.text = "\(studentLocation.firstName) \(studentLocation.lastName)"
+        cell.imageView?.image = UIImage(named: "pin")
         return cell
     }
 }
@@ -55,22 +50,21 @@ extension ListViewController: UITableViewDelegate
 {
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath)
     {
-        if let studentLocation = studentLocations?[indexPath.row] {
-            if let url = NSURL(string: studentLocation.mediaURL) {
-                if UIApplication.sharedApplication().canOpenURL(url) {
-                    UIApplication.sharedApplication().openURL(url)
-                }
-                else {
-                    let alertController = UIAlertController(title: "Couldn't open URL", message: "The system was not able to open URL - \"\(studentLocation.mediaURL)\"", preferredStyle: .Alert)
-                    alertController.addAction(UIAlertAction(title: "Okay", style: .Default, handler: { _ in self.dismissViewControllerAnimated(true, completion: nil) }))
-                    self.presentViewController(alertController, animated: true, completion: nil)
-                }
+        let studentLocation = StudentDataStore.studentData[indexPath.row]
+        if let url = NSURL(string: studentLocation.mediaURL) {
+            if UIApplication.sharedApplication().canOpenURL(url) {
+                UIApplication.sharedApplication().openURL(url)
             }
             else {
-                let alertController = UIAlertController(title: "Couldn't open URL", message: "URL \"\(studentLocation.mediaURL)\" is not a valid URL", preferredStyle: .Alert)
+                let alertController = UIAlertController(title: "Couldn't open URL", message: "The system was not able to open URL - \"\(studentLocation.mediaURL)\"", preferredStyle: .Alert)
                 alertController.addAction(UIAlertAction(title: "Okay", style: .Default, handler: { _ in self.dismissViewControllerAnimated(true, completion: nil) }))
                 self.presentViewController(alertController, animated: true, completion: nil)
             }
+        }
+        else {
+            let alertController = UIAlertController(title: "Couldn't open URL", message: "URL \"\(studentLocation.mediaURL)\" is not a valid URL", preferredStyle: .Alert)
+            alertController.addAction(UIAlertAction(title: "Okay", style: .Default, handler: { _ in self.dismissViewControllerAnimated(true, completion: nil) }))
+            self.presentViewController(alertController, animated: true, completion: nil)
         }
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
@@ -81,7 +75,6 @@ extension ListViewController: TabBarCommonOperations
     // Must be called on the main thread
     func refreshTapped(sender: AnyObject)
     {
-        studentLocations = (UIApplication.sharedApplication().delegate as? AppDelegate)?.studentLocations
-        self.tableView.reloadData()
+        tableView.reloadData()
     }
 }
