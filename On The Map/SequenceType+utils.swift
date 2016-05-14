@@ -6,9 +6,9 @@
 //  Copyright © 2016 Maarut Chandegra. All rights reserved.
 //
 
-extension Array
+extension SequenceType
 {
-    func first(@noescape comparator: (Element) -> Bool) -> Element?
+    func first(@noescape comparator: (Self.Generator.Element) -> Bool) -> Self.Generator.Element?
     {
         for e in self {
             if comparator(e) { return e }
