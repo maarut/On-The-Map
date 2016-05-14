@@ -20,6 +20,7 @@ class ListViewController: UIViewController
     
 }
 
+// MARK: - UITableViewDataSource Implementation
 extension ListViewController: UITableViewDataSource
 {
     
@@ -38,31 +39,32 @@ extension ListViewController: UITableViewDataSource
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
     {
-        let cell = tableView.dequeueReusableCellWithIdentifier("studentLocation")!
-        let studentLocation = StudentDataStore.studentData[indexPath.row]
-        cell.textLabel?.text = "\(studentLocation.firstName) \(studentLocation.lastName)"
+        let cell = tableView.dequeueReusableCellWithIdentifier("studentData")!
+        let studentData = StudentDataStore.studentData[indexPath.row]
+        cell.textLabel?.text = "\(studentData.firstName) \(studentData.lastName)"
         cell.imageView?.image = UIImage(named: "pin")
         return cell
     }
 }
 
+// MARK: - UITableViewDelegate Implementation
 extension ListViewController: UITableViewDelegate
 {
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath)
     {
-        let studentLocation = StudentDataStore.studentData[indexPath.row]
-        if let url = NSURL(string: studentLocation.mediaURL) {
+        let studentData = StudentDataStore.studentData[indexPath.row]
+        if let url = NSURL(string: studentData.mediaURL) {
             if UIApplication.sharedApplication().canOpenURL(url) {
                 UIApplication.sharedApplication().openURL(url)
             }
             else {
-                let alertController = UIAlertController(title: "Couldn't open URL", message: "The system was not able to open URL - \"\(studentLocation.mediaURL)\"", preferredStyle: .Alert)
+                let alertController = UIAlertController(title: "Couldn't open URL", message: "The system was not able to open URL - \"\(studentData.mediaURL)\"", preferredStyle: .Alert)
                 alertController.addAction(UIAlertAction(title: "Okay", style: .Default, handler: { _ in self.dismissViewControllerAnimated(true, completion: nil) }))
                 self.presentViewController(alertController, animated: true, completion: nil)
             }
         }
         else {
-            let alertController = UIAlertController(title: "Couldn't open URL", message: "URL \"\(studentLocation.mediaURL)\" is not a valid URL", preferredStyle: .Alert)
+            let alertController = UIAlertController(title: "Couldn't open URL", message: "URL \"\(studentData.mediaURL)\" is not a valid URL", preferredStyle: .Alert)
             alertController.addAction(UIAlertAction(title: "Okay", style: .Default, handler: { _ in self.dismissViewControllerAnimated(true, completion: nil) }))
             self.presentViewController(alertController, animated: true, completion: nil)
         }
@@ -70,6 +72,7 @@ extension ListViewController: UITableViewDelegate
     }
 }
 
+// MARK: - TabBarCommonOperations Implementation
 extension ListViewController: TabBarCommonOperations
 {
     // Must be called on the main thread

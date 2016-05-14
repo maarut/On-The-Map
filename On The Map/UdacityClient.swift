@@ -8,7 +8,8 @@
 
 import UIKit
 
-class UdacityClient {
+class UdacityClient
+{
     
     private (set) var session = NSURLSession.sharedSession()
     private (set) var user: UdacityUser?
@@ -62,7 +63,7 @@ class UdacityClient {
     {
         let task = taskForDELETEMethod(Methods.Session) { (data, error) in
             func logError(errorString: String) {
-                let error = NSError(domain: "UdacityClient.login", code: 1, userInfo: [NSLocalizedDescriptionKey: errorString])
+                let error = NSError(domain: "UdacityClient.logout", code: 1, userInfo: [NSLocalizedDescriptionKey: errorString])
                 completionHandler(false, error)
             }
             guard error == nil else {

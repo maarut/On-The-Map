@@ -60,7 +60,7 @@ class MapViewController: UIViewController
         let currentLocation = self.locationManager.location
         if currentLocation != nil && !StudentDataStore.studentData.isEmpty {
             dispatch_async(dispatch_get_main_queue()) {
-                self.mapView.setRegion(self.coordinateRegionForStudentLocations(
+                self.mapView.setRegion(self.coordinateRegionForStudentData(
                     StudentDataStore.studentData, nearCurrentLocation: currentLocation!),
                                        animated: true)
             }
@@ -81,9 +81,9 @@ class MapViewController: UIViewController
         } ?? []
     }
     
-    private func coordinateRegionForStudentLocations(studentLocations: [StudentData], nearCurrentLocation currentLocation: CLLocation) -> MKCoordinateRegion
+    private func coordinateRegionForStudentData(studentData: [StudentData], nearCurrentLocation currentLocation: CLLocation) -> MKCoordinateRegion
     {
-        let coordinates = StudentDataStore.studentLocationsSurroundingLocation(currentLocation).map {
+        let coordinates = StudentDataStore.studentDataSurroundingLocation(currentLocation).map {
             CLLocationCoordinate2D(latitude: CLLocationDegrees($0.latitude), longitude: CLLocationDegrees($0.longitude))
         }
         return MKCoordinateRegionMake(regionSpanningCoordinates: coordinates, centeringOn: currentLocation.coordinate)

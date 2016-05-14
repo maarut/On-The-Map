@@ -182,8 +182,10 @@ extension LoginViewController: UITextFieldDelegate
 // underlined text. A NSTextStorage object is created and "overlaid" over the label text.
 // The location of the tap is then translated to a point over the NSTextStorage object.
 // We can then determine if a character that we're interested in has been tapped.
-private extension UITapGestureRecognizer {
-    func didTapAttributedTextInLabel(label: UILabel, inRange targetRange: NSRange) -> Bool {
+private extension UITapGestureRecognizer
+{
+    func didTapAttributedTextInLabel(label: UILabel, inRange targetRange: NSRange) -> Bool
+    {
         // Create instances of NSLayoutManager, NSTextContainer and NSTextStorage
         let layoutManager = NSLayoutManager()
         let textContainer = NSTextContainer(size: CGSize.zero)

@@ -6,36 +6,41 @@
 //  Copyright © 2016 Maarut Chandegra. All rights reserved.
 //
 
-extension ParseClient {
-    struct Headers {
+extension ParseClient
+{
+    struct Headers
+    {
         static let ApplicationID = (httpHeader: "X-Parse-Application-Id", value: "QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr")
         static let APIKey = (httpHeader: "X-Parse-REST-API-Key", value: "QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY")
     }
     
-    struct Constants {
-        
-        
+    struct Constants
+    {
         static let ApiScheme = "https"
         static let ApiHost = "api.parse.com"
         static let ApiPath = "/1/classes/"
     }
     
-    struct Methods {
+    struct Methods
+    {
         static let StudentLocation = "StudentLocation"
     }
     
-    struct StudentLocationParameters {
+    struct StudentDataParameters
+    {
         static let Limit = "limit"
         static let Order = "order"
         static let Skip = "skip"
         static let Where = "where"
     }
     
-    struct StudentLocationResponseKeys {
+    struct StudentDataResponseKeys
+    {
         static let Results = "results"
     }
     
-    struct StudentLocationFields {
+    struct StudentDataFields
+    {
         static let ObjectId = "objectId"
         static let UniqueKey = "uniqueKey"
         static let FirstName = "firstName"

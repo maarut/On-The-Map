@@ -8,11 +8,14 @@
 
 import UIKit
 
-class MainTabBarViewController: UITabBarController {
+class MainTabBarViewController: UITabBarController
+{
+    // MARK: - Instance Variables
     weak var logoutButton: UIBarButtonItem!
     weak var postLocationButton: UIBarButtonItem!
     weak var refreshItemsButton: UIBarButtonItem!
 
+    // MARK: - Overrides
     override func viewDidLoad()
     {
         super.viewDidLoad()
@@ -31,7 +34,7 @@ class MainTabBarViewController: UITabBarController {
     {
         super.viewWillAppear(animated)
         navigationController?.navigationBarHidden = false
-        StudentDataStore.refreshStudentLocationsWithCompletionHandler { (didSucceed, error) in
+        StudentDataStore.refreshStudentDataWithCompletionHandler { (didSucceed, error) in
             if !didSucceed { NSLog(error!.localizedDescription); return }
             if let selectedVC = self.selectedViewController as? TabBarCommonOperations {
                 selectedVC.refreshTapped(self)
@@ -46,9 +49,10 @@ class MainTabBarViewController: UITabBarController {
         navigationController?.navigationBarHidden = true
     }
     
+    // MARK: - Public Functions
     func refreshTapped(sender: AnyObject)
     {
-        StudentDataStore.refreshStudentLocationsWithCompletionHandler { (didSucceed, error) in
+        StudentDataStore.refreshStudentDataWithCompletionHandler { (didSucceed, error) in
             dispatch_async(dispatch_get_main_queue()) {
                 guard didSucceed else {
                     let alertController = UIAlertController(title: "Couldn't fetch data", message: "\(error!.localizedDescription)", preferredStyle: .Alert)

@@ -8,7 +8,8 @@
 
 import Foundation
 
-class ParseClient {
+class ParseClient
+{
     private (set) var session = NSURLSession.sharedSession()
     
     private init() { }
@@ -20,14 +21,92 @@ class ParseClient {
         return DispatchOnce.value!
     }
     
-    func getStudentLocations(completionHandler: ([StudentData]?, NSError?) -> Void)
+    func getStudentData(completionHandler: ([StudentData]?, NSError?) -> Void)
     {
-        let options: [String: AnyObject] = [StudentLocationParameters.Limit: 100, StudentLocationParameters.Order: "-\(StudentLocationFields.UpdatedAt)"]
+        let options: [String: AnyObject] = [StudentDataParameters.Limit: 100, StudentDataParameters.Order: "-\(StudentDataFields.UpdatedAt)"]
+        getStudentDataWithOptions(options, completionHandler: completionHandler)
+    }
+    
+    func postStudentData(studentData: StudentData, errorHandler: (NSError) -> Void)
+    {
+        if let oldValue = locallyCachedValueFor(studentData), objectId = oldValue.objectId {
+            updateStudentDataWithObjectId(objectId, withNewValue: studentData, errorHandler: errorHandler)
+        }
+        else {
+            searchForRemoteValueForStudentData(studentData) { (oldValue, error) in
+                guard error == nil else {
+                    errorHandler(error!)
+                    return
+                }
+                if let oldValue = oldValue, objectId = oldValue.objectId {
+                    self.updateStudentDataWithObjectId(objectId, withNewValue: studentData, errorHandler: errorHandler)
+                }
+                else {
+                    let task = self.taskForPOSTMethod(Methods.StudentLocation, studentData: studentData) { (data, error) in
+                        if error != nil { errorHandler(error!) }
+                    }
+                    task.resume()
+                }
+            }
+            
+        }
+    }
+    
+    private func updateStudentDataWithObjectId(objectId: String, withNewValue newValue: StudentData, errorHandler: (NSError) -> Void)
+    {
+        let method = "\(Methods.StudentLocation)/\(objectId)"
+        let task = taskForPUTMethod(method, studentData: newValue) { (_, error) in
+            if error != nil { errorHandler(error!) }
+        }
+        task.resume()
+    }
+    
+    private func searchForRemoteValueForStudentData(studentData: StudentData, completionHandler: (StudentData?, NSError?) -> Void)
+    {
+        let condition: [String: AnyObject] = [StudentDataFields.UniqueKey: studentData.uniqueKey]
+        let json: NSData!
+        do {
+            json = try NSJSONSerialization.dataWithJSONObject(condition, options: NSJSONWritingOptions(rawValue: 0))
+        }
+        catch {
+            NSLog("Unable to JSONify dictionary \(condition)")
+            json = nil
+        }
+        let conditionString = NSString(data: json, encoding: NSUTF8StringEncoding)!
+        getStudentDataWithOptions([StudentDataParameters.Where: conditionString]) { (searchResults, error) in
+            guard error == nil else {
+                completionHandler(nil, error!)
+                return
+            }
+            guard let searchResults = searchResults else {
+                let userInfo = [NSLocalizedDescriptionKey: "No student data returned"]
+                completionHandler(nil, NSError(domain: "ParseClient.updateStudentDataWithNewValue", code: 1, userInfo: userInfo))
+                return
+            }
+            if let oldValue = searchResults.first( { $0.firstName == studentData.firstName && $0.lastName == studentData.lastName } ) {
+                completionHandler(oldValue, nil)
+            }
+            else {
+                completionHandler(nil, nil)
+            }
+        }
+    }
+    
+    private func locallyCachedValueFor(studentData: StudentData) -> StudentData?
+    {
+        if let previousValue = StudentDataStore.studentData.first( { studentData.uniqueKey == $0.uniqueKey } ) {
+            return previousValue
+        }
+        return nil
+    }
+    
+    private func getStudentDataWithOptions(options: [String: AnyObject], completionHandler: ([StudentData]?, NSError?) -> Void)
+    {
         let task = taskForGETMethod(Methods.StudentLocation, parameters: options) { (data, error) in
             func sendError(errorStr: String)
             {
                 let userInfo = [NSLocalizedDescriptionKey: errorStr]
-                completionHandler(nil, NSError(domain: "getStudentLocations", code: 1, userInfo: userInfo))
+                completionHandler(nil, NSError(domain: "getStudentDataWithOptions", code: 1, userInfo: userInfo))
             }
             
             guard let data = data as? [String: AnyObject] else {
@@ -35,8 +114,8 @@ class ParseClient {
                 return
             }
             
-            guard let results = data[ParseClient.StudentLocationResponseKeys.Results] as? [[String: AnyObject]] else {
-                sendError("Unable to find key \"\(ParseClient.StudentLocationResponseKeys.Results)\"")
+            guard let results = data[ParseClient.StudentDataResponseKeys.Results] as? [[String: AnyObject]] else {
+                sendError("Unable to find key \"\(ParseClient.StudentDataResponseKeys.Results)\"")
                 return
             }
             
@@ -53,15 +132,5 @@ class ParseClient {
             
         }
         task.resume()
-    }
-    
-    func postStudentLocation(studentData: AnyObject, completionHandler: () -> Void)
-    {
-        
-    }
-    
-    func updateStudentLocation(updatedStudentData: AnyObject, completionHandler: () -> Void)
-    {
-        
     }
 }

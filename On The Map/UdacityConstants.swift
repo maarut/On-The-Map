@@ -8,32 +8,38 @@
 
 import UIKit
 
-extension UdacityClient {
-    struct Constants {
+extension UdacityClient
+{
+    struct Constants
+    {
         static let ApiScheme = "https"
         static let ApiHost = "www.udacity.com"
         static let ApiPath = "/api/"
 
     }
     
-    struct Methods {
+    struct Methods
+    {
         static let Session = "session"
         static let Users = "users"
     }
     
-    struct ResponseKeys {
+    struct ResponseKeys
+    {
         static let ForbiddenResponseKey = "UdacityClient.403ForbiddenResponseKey"
         static let ForbiddenResponseErrorCode = 403
         static let ErrorKey = "error"
         static let ErrorMessageKey = "contents"
     }
     
-    struct UserLoginResponseKeys {
+    struct UserLoginResponseKeys
+    {
         static let Account = "account"
         static let AccountId = "key"
     }
     
-    struct UserDataResponseKeys {
+    struct UserDataResponseKeys
+    {
         static let User = "user"
         static let FirstName = "first_name"
         static let LastName = "last_name"

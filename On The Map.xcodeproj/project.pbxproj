@@ -22,6 +22,8 @@
 		E32053D01CD9167800859DB2 /* TabBarCommonOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = E32053CF1CD9167800859DB2 /* TabBarCommonOperations.swift */; };
 		E32053D21CE249E200859DB2 /* StudentDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E32053D11CE249E200859DB2 /* StudentDataStore.swift */; };
 		E32053D51CE24E1D00859DB2 /* MKCoordinateRegion+utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E32053D41CE24E1D00859DB2 /* MKCoordinateRegion+utils.swift */; };
+		E32053D71CE6248600859DB2 /* PostLinkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E32053D61CE6248600859DB2 /* PostLinkViewController.swift */; };
+		E32053D91CE73E4C00859DB2 /* Array+utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E32053D81CE73E4C00859DB2 /* Array+utils.swift */; };
 		E38306921CD8CB4600C103D2 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E38306911CD8CB4600C103D2 /* MapViewController.swift */; };
 		E38306951CD921F600C103D2 /* ParseConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = E38306941CD921F600C103D2 /* ParseConstants.swift */; };
 		E38306971CDA054200C103D2 /* ParseClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E38306961CDA054200C103D2 /* ParseClient.swift */; };
@@ -59,6 +61,8 @@
 		E32053CF1CD9167800859DB2 /* TabBarCommonOperations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarCommonOperations.swift; sourceTree = "<group>"; };
 		E32053D11CE249E200859DB2 /* StudentDataStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StudentDataStore.swift; sourceTree = "<group>"; };
 		E32053D41CE24E1D00859DB2 /* MKCoordinateRegion+utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MKCoordinateRegion+utils.swift"; sourceTree = "<group>"; };
+		E32053D61CE6248600859DB2 /* PostLinkViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostLinkViewController.swift; sourceTree = "<group>"; };
+		E32053D81CE73E4C00859DB2 /* Array+utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+utils.swift"; sourceTree = "<group>"; };
 		E38306911CD8CB4600C103D2 /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		E38306941CD921F600C103D2 /* ParseConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParseConstants.swift; sourceTree = "<group>"; };
 		E38306961CDA054200C103D2 /* ParseClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParseClient.swift; sourceTree = "<group>"; };
@@ -130,6 +134,7 @@
 				E30C5DC71CD00A1300B99D93 /* MainTabBarViewController.swift */,
 				E38306911CD8CB4600C103D2 /* MapViewController.swift */,
 				E32053CC1CD913FE00859DB2 /* ListViewController.swift */,
+				E32053D61CE6248600859DB2 /* PostLinkViewController.swift */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -187,6 +192,7 @@
 			isa = PBXGroup;
 			children = (
 				E32053D41CE24E1D00859DB2 /* MKCoordinateRegion+utils.swift */,
+				E32053D81CE73E4C00859DB2 /* Array+utils.swift */,
 			);
 			name = utils;
 			sourceTree = "<group>";
@@ -319,6 +325,8 @@
 				E32053CD1CD913FE00859DB2 /* ListViewController.swift in Sources */,
 				E30C5DC41CCE649600B99D93 /* UdacityConvenience.swift in Sources */,
 				E30C5DC01CCE3EE100B99D93 /* UdacityClient.swift in Sources */,
+				E32053D71CE6248600859DB2 /* PostLinkViewController.swift in Sources */,
+				E32053D91CE73E4C00859DB2 /* Array+utils.swift in Sources */,
 				E32053D01CD9167800859DB2 /* TabBarCommonOperations.swift in Sources */,
 				E38306921CD8CB4600C103D2 /* MapViewController.swift in Sources */,
 			);

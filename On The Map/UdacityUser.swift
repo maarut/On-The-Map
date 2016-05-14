@@ -8,7 +8,8 @@
 
 import Foundation
 
-struct UdacityUser {
+struct UdacityUser
+{
     var userId: Int
     var firstName: String
     var lastName: String

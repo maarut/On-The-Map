@@ -8,20 +8,21 @@
 
 import Foundation
 
-extension UdacityClient {
+extension UdacityClient
+{
     
     func taskForGETMethod(method: String, parameters: [String: AnyObject], completionHandler: (data: AnyObject?, error: NSError?) -> Void) -> NSURLSessionDataTask
     {
         let url = udacityURL(withPathExtension: method)
         let request = NSURLRequest(URL: url)
-        return dataTaskWithRequest(request, methodName: "taskForGETMethod", completionHandler: completionHandler)
+        return dataTaskWithRequest(request, methodName: "UdacityConvenience.taskForGETMethod", completionHandler: completionHandler)
     }
     
     func taskForDELETEMethod(method: String, completionHandler: (data: AnyObject?, error: NSError?) -> Void) -> NSURLSessionDataTask
     {
         let url = udacityURL(withPathExtension: method)
         let request = urlRequestForDELETE(url)
-        return dataTaskWithRequest(request, methodName: "taskForDELETEMethod", completionHandler: completionHandler)
+        return dataTaskWithRequest(request, methodName: "UdacityConvenience.taskForDELETEMethod", completionHandler: completionHandler)
     }
     
     func taskForPOSTMethod(method: String, parameters: [String: AnyObject], httpBody: [String: AnyObject], completionHandler: (data: AnyObject?, error: NSError?) -> Void) -> NSURLSessionDataTask
@@ -32,7 +33,7 @@ extension UdacityClient {
             func sendError(error: String)
             {
                 let userInfo = [NSLocalizedDescriptionKey: error]
-                completionHandler(data: nil, error: NSError(domain: "taskForPOSTMethod", code: 1, userInfo: userInfo))
+                completionHandler(data: nil, error: NSError(domain: "UdacityConvenience.taskForPOSTMethod", code: 1, userInfo: userInfo))
             }
             
             guard error == nil else {
@@ -63,7 +64,7 @@ extension UdacityClient {
                     break
                 case 403:
                     let userInfo = [ResponseKeys.ForbiddenResponseKey: parsedResult]
-                    completionHandler(data: nil, error: NSError(domain: "taskForPOSTMethod", code: ResponseKeys.ForbiddenResponseErrorCode, userInfo: userInfo))
+                    completionHandler(data: nil, error: NSError(domain: "UdacityConvenience.taskForPOSTMethod", code: ResponseKeys.ForbiddenResponseErrorCode, userInfo: userInfo))
                     return
                 default:
                     sendError("The request returned an unexpected status code.")
@@ -76,7 +77,8 @@ extension UdacityClient {
         return task
     }
     
-    private func udacityURL(withPathExtension pathExtension: String = "") -> NSURL {
+    private func udacityURL(withPathExtension pathExtension: String = "") -> NSURL
+    {
         let components = NSURLComponents()
         components.scheme = Constants.ApiScheme
         components.host = Constants.ApiHost

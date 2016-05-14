@@ -18,9 +18,9 @@ class StudentDataStore
     
     private init() { }
     
-    static func refreshStudentLocationsWithCompletionHandler(completionHandler: (didSucceed: Bool, error: NSError?) -> Void)
+    static func refreshStudentDataWithCompletionHandler(completionHandler: (didSucceed: Bool, error: NSError?) -> Void)
     {
-        ParseClient.sharedInstance().getStudentLocations { (locations, error) in
+        ParseClient.sharedInstance().getStudentData { (locations, error) in
             guard error == nil else {
                 completionHandler(didSucceed: false, error: error)
                 return
@@ -30,17 +30,17 @@ class StudentDataStore
         }
     }
     
-    static func studentLocationsSurroundingLocation(location: CLLocation) -> [StudentData]
+    static func studentDataSurroundingLocation(location: CLLocation) -> [StudentData]
     {
         var distanceSpan = locationDistanceLimit
-        let sortedStudentLocations = studentData.sort {
+        let sortedStudentData = studentData.sort {
             let one = CLLocation(latitude: CLLocationDegrees($0.latitude), longitude: CLLocationDegrees($0.longitude))
             let two = CLLocation(latitude: CLLocationDegrees($1.latitude), longitude: CLLocationDegrees($1.longitude))
             return one.distanceFromLocation(location) < two.distanceFromLocation(location)
         }
         
         
-        return sortedStudentLocations.filter {
+        return sortedStudentData.filter {
             let l = CLLocation(latitude: CLLocationDegrees($0.latitude),
                 longitude: CLLocationDegrees($0.longitude))
             let distanceFromLocation = l.distanceFromLocation(location)
