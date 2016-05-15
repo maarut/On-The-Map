@@ -52,7 +52,7 @@ class ParseClient
         }
     }
     
-    // Generally to be used by UI code. The completionHandler will always be called within 3 seconds.
+    // Generally to be used by UI code. Ensures a shorter timeout than NSURLSession.sharedSession()
     func hasBeenPostedPreviously(studentData: StudentData, completionHandler: (Bool?, NSError?) -> Void)
     {
         if let _ = locallyCachedValueFor(studentData) {
@@ -60,7 +60,7 @@ class ParseClient
         }
         else {
             // Hack to avoid using a specific URL session with a very short timeout to deal with this request.
-            let lock: NSLock = NSLock()
+            let lock = NSLock()
             var hasCompleted = false
             let task = searchRemotelyForStudentData(studentData) { (oldValue, error) in
                 do {
