@@ -53,7 +53,7 @@ class MainTabBarViewController: UITabBarController
     func refreshTapped(sender: AnyObject)
     {
         StudentDataStore.refreshStudentDataWithCompletionHandler { (didSucceed, error) in
-            dispatch_async(dispatch_get_main_queue()) {
+            onMainQueueDo {
                 guard didSucceed else {
                     let alertController = UIAlertController(title: "Couldn't fetch data", message: "\(error!.localizedDescription)", preferredStyle: .Alert)
                     alertController.addAction(UIAlertAction(title: "Okay", style: .Default, handler: { _ in self.dismissViewControllerAnimated(true, completion: nil) }))
@@ -78,7 +78,7 @@ class MainTabBarViewController: UITabBarController
         let presentedVC = presentedViewController
         presentedVC?.view.userInteractionEnabled = false
         UdacityClient.sharedInstance().logout { (didSucceed, error) in
-            dispatch_async(dispatch_get_main_queue()) {
+            onMainQueueDo {
                 self.logoutButton.enabled = true
                 presentedVC?.view.userInteractionEnabled = true
                 if didSucceed {

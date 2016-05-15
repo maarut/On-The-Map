@@ -27,13 +27,17 @@ class ParseClient
         getStudentDataWithOptions(options, completionHandler: completionHandler)
     }
     
-    func postStudentData(studentData: StudentData, errorHandler: (NSError) -> Void)
+    func postStudentData(studentData: StudentData, overwritingPreviousValue: Bool, errorHandler: (NSError) -> Void)
     {
+        if !overwritingPreviousValue {
+            createStudentDataRemotely(studentData, errorHandler: errorHandler)
+            return
+        }
         if let oldValue = locallyCachedValueFor(studentData), objectId = oldValue.objectId {
             updateStudentDataWithObjectId(objectId, withNewValue: studentData, errorHandler: errorHandler)
         }
         else {
-            searchForRemoteValueForStudentData(studentData) { (oldValue, error) in
+            searchRemotelyForStudentData(studentData) { (oldValue, error) in
                 guard error == nil else {
                     errorHandler(error!)
                     return
@@ -42,26 +46,64 @@ class ParseClient
                     self.updateStudentDataWithObjectId(objectId, withNewValue: studentData, errorHandler: errorHandler)
                 }
                 else {
-                    let task = self.taskForPOSTMethod(Methods.StudentLocation, studentData: studentData) { (data, error) in
-                        if error != nil { errorHandler(error!) }
-                    }
-                    task.resume()
+                    self.createStudentDataRemotely(studentData, errorHandler: errorHandler)
                 }
             }
-            
         }
+    }
+    
+    // Generally to be used by UI code. The completionHandler will always be called within 3 seconds.
+    func hasBeenPostedPreviously(studentData: StudentData, completionHandler: (Bool?, NSError?) -> Void)
+    {
+        if let _ = locallyCachedValueFor(studentData) {
+            completionHandler(true, nil)
+        }
+        else {
+            // Hack to avoid using a specific URL session with a very short timeout to deal with this request.
+            let lock: NSLock = NSLock()
+            var hasCompleted = false
+            let task = searchRemotelyForStudentData(studentData) { (oldValue, error) in
+                do {
+                    lock.lock()
+                    defer { lock.unlock() }
+                    if hasCompleted { return }
+                    hasCompleted = true
+                }
+                guard error == nil else {
+                    completionHandler(nil, error!)
+                    return
+                }
+                completionHandler(oldValue != nil, nil)
+            }
+            after(3.seconds()) {
+                do {
+                    lock.lock()
+                    defer { lock.unlock() }
+                    if hasCompleted { return }
+                    hasCompleted = true
+                }
+                task.cancel()
+                completionHandler(false, nil)
+            }
+        }
+        
+    }
+    
+    private func createStudentDataRemotely(studentData: StudentData, errorHandler: (NSError) -> Void)
+    {
+        taskForPOSTMethod(Methods.StudentLocation, studentData: studentData) {
+            if $0.error != nil { errorHandler($0.error!) }
+        }.resume()
     }
     
     private func updateStudentDataWithObjectId(objectId: String, withNewValue newValue: StudentData, errorHandler: (NSError) -> Void)
     {
         let method = "\(Methods.StudentLocation)/\(objectId)"
-        let task = taskForPUTMethod(method, studentData: newValue) { (_, error) in
-            if error != nil { errorHandler(error!) }
-        }
+        let task = taskForPUTMethod(method, studentData: newValue) { if $0.error != nil { errorHandler($0.error!) } }
         task.resume()
     }
     
-    private func searchForRemoteValueForStudentData(studentData: StudentData, completionHandler: (StudentData?, NSError?) -> Void)
+    private func searchRemotelyForStudentData(studentData: StudentData, completionHandler: (StudentData?, NSError?) -> Void) -> NSURLSessionDataTask
     {
         let condition: [String: AnyObject] = [StudentDataFields.UniqueKey: studentData.uniqueKey]
         let json: NSData!
@@ -73,7 +115,7 @@ class ParseClient
             json = nil
         }
         let conditionString = NSString(data: json, encoding: NSUTF8StringEncoding)!
-        getStudentDataWithOptions([StudentDataParameters.Where: conditionString]) { (searchResults, error) in
+        return getStudentDataWithOptions([StudentDataParameters.Where: conditionString]) { (searchResults, error) in
             guard error == nil else {
                 completionHandler(nil, error!)
                 return
@@ -100,7 +142,7 @@ class ParseClient
         return nil
     }
     
-    private func getStudentDataWithOptions(options: [String: AnyObject], completionHandler: ([StudentData]?, NSError?) -> Void)
+    private func getStudentDataWithOptions(options: [String: AnyObject], completionHandler: ([StudentData]?, NSError?) -> Void) -> NSURLSessionDataTask
     {
         let task = taskForGETMethod(Methods.StudentLocation, parameters: options) { (data, error) in
             func sendError(errorStr: String)
@@ -132,5 +174,6 @@ class ParseClient
             
         }
         task.resume()
+        return task
     }
 }

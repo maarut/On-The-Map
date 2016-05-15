@@ -12,12 +12,14 @@ class LoginViewController: UIViewController
 {
     private let signUpLinkString = NSURL(string: "https://www.udacity.com/account/auth#!/signup")!
     
+    // MARK: - IBOutlets
     @IBOutlet weak var noAccountLabel: UILabel!
     @IBOutlet weak var usernameEntry: UITextField!
     @IBOutlet weak var passwordEntry: UITextField!
     @IBOutlet weak var loginButton: UIButton!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
+    // MARK: - Overrides
     override func viewDidLoad()
     {
         super.viewDidLoad()
@@ -46,6 +48,7 @@ class LoginViewController: UIViewController
         resignFirstResponderForTextFields()
     }
     
+    // MARK: - IBActions
     @IBAction func labelTapped(sender: UITapGestureRecognizer)
     {
         if resignFirstResponderForTextFields() { return }
@@ -63,7 +66,7 @@ class LoginViewController: UIViewController
         loginButton.setTitle("", forState: .Normal)
         activityIndicator.startAnimating()
         UdacityClient.sharedInstance().login(usernameEntry.text!, password: passwordEntry.text!) { (didSucceed, error) in
-            dispatch_async(dispatch_get_main_queue()) {
+            onMainQueueDo {
                 if didSucceed {
                     self.performSegueWithIdentifier("loggedInSegue", sender: self)
                 }
@@ -96,6 +99,7 @@ class LoginViewController: UIViewController
         performSegueWithIdentifier("loggedInSegue", sender: self)
     }
     
+    // MARK: - Private Functions
     private func resignFirstResponderForTextFields() -> Bool
     {
         for textField in [usernameEntry, passwordEntry] {
@@ -116,6 +120,8 @@ class LoginViewController: UIViewController
     }
 
 }
+
+// MARK: - UITextFieldDelegate Implementation
 
 extension LoginViewController: UITextFieldDelegate
 {
@@ -174,6 +180,8 @@ extension LoginViewController: UITextFieldDelegate
         return true
     }
 }
+
+// MARK: - Linked Text
 
 // UILabel doesn't have builtin functionality to send the user to Safari when tapping a link.
 // The code below was found at

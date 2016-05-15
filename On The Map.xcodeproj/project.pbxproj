@@ -18,6 +18,7 @@
 		E30C5DC41CCE649600B99D93 /* UdacityConvenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = E30C5DC31CCE649600B99D93 /* UdacityConvenience.swift */; };
 		E30C5DC61CCEA48800B99D93 /* UdacityUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E30C5DC51CCEA48800B99D93 /* UdacityUser.swift */; };
 		E30C5DC81CD00A1300B99D93 /* MainTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E30C5DC71CD00A1300B99D93 /* MainTabBarViewController.swift */; };
+		E317FE521CE91C370088EF1C /* Dispatch+utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E317FE511CE91C370088EF1C /* Dispatch+utils.swift */; };
 		E32053CD1CD913FE00859DB2 /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E32053CC1CD913FE00859DB2 /* ListViewController.swift */; };
 		E32053D01CD9167800859DB2 /* TabBarCommonOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = E32053CF1CD9167800859DB2 /* TabBarCommonOperations.swift */; };
 		E32053D21CE249E200859DB2 /* StudentDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E32053D11CE249E200859DB2 /* StudentDataStore.swift */; };
@@ -57,6 +58,7 @@
 		E30C5DC31CCE649600B99D93 /* UdacityConvenience.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UdacityConvenience.swift; sourceTree = "<group>"; };
 		E30C5DC51CCEA48800B99D93 /* UdacityUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UdacityUser.swift; sourceTree = "<group>"; };
 		E30C5DC71CD00A1300B99D93 /* MainTabBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTabBarViewController.swift; sourceTree = "<group>"; };
+		E317FE511CE91C370088EF1C /* Dispatch+utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Dispatch+utils.swift"; sourceTree = "<group>"; };
 		E32053CC1CD913FE00859DB2 /* ListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 		E32053CF1CD9167800859DB2 /* TabBarCommonOperations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarCommonOperations.swift; sourceTree = "<group>"; };
 		E32053D11CE249E200859DB2 /* StudentDataStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StudentDataStore.swift; sourceTree = "<group>"; };
@@ -193,6 +195,7 @@
 			children = (
 				E32053D41CE24E1D00859DB2 /* MKCoordinateRegion+utils.swift */,
 				E32053D81CE73E4C00859DB2 /* SequenceType+utils.swift */,
+				E317FE511CE91C370088EF1C /* Dispatch+utils.swift */,
 			);
 			name = utils;
 			sourceTree = "<group>";
@@ -319,6 +322,7 @@
 				E30C5DC21CCE413500B99D93 /* UdacityConstants.swift in Sources */,
 				E30C5DC81CD00A1300B99D93 /* MainTabBarViewController.swift in Sources */,
 				E30C5D961CCA41D700B99D93 /* AppDelegate.swift in Sources */,
+				E317FE521CE91C370088EF1C /* Dispatch+utils.swift in Sources */,
 				E32053D21CE249E200859DB2 /* StudentDataStore.swift in Sources */,
 				E32053D51CE24E1D00859DB2 /* MKCoordinateRegion+utils.swift in Sources */,
 				E38306971CDA054200C103D2 /* ParseClient.swift in Sources */,

@@ -59,14 +59,14 @@ class MapViewController: UIViewController
     {
         let currentLocation = self.locationManager.location
         if currentLocation != nil && !StudentDataStore.studentData.isEmpty {
-            dispatch_async(dispatch_get_main_queue()) {
+            onMainQueueDo {
                 self.mapView.setRegion(self.coordinateRegionForStudentData(
                     StudentDataStore.studentData, nearCurrentLocation: currentLocation!),
                                        animated: true)
             }
         }
         else {
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(NSEC_PER_SEC * 3)), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), updateLocationOnMap)
+            after(3.seconds(), executeBlock: updateLocationOnMap)
         }
     }
     
