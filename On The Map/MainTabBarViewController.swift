@@ -37,10 +37,9 @@ class MainTabBarViewController: UITabBarController
         StudentDataStore.refreshStudentDataWithCompletionHandler { (didSucceed, error) in
             if !didSucceed { NSLog(error!.localizedDescription); return }
             if let selectedVC = self.selectedViewController as? TabBarCommonOperations {
-                selectedVC.refreshTapped(self)
+                onMainQueueDo { selectedVC.refreshTapped(self) }
             }
         }
-        
     }
     
     override func viewWillDisappear(animated: Bool)
@@ -55,9 +54,7 @@ class MainTabBarViewController: UITabBarController
         StudentDataStore.refreshStudentDataWithCompletionHandler { (didSucceed, error) in
             onMainQueueDo {
                 guard didSucceed else {
-                    let alertController = UIAlertController(title: "Couldn't fetch data", message: "\(error!.localizedDescription)", preferredStyle: .Alert)
-                    alertController.addAction(UIAlertAction(title: "Okay", style: .Default, handler: { _ in self.dismissViewControllerAnimated(true, completion: nil) }))
-                    self.presentViewController(alertController, animated: true, completion: nil)
+                    self.showErrorWithTitle("Data Fetch Error", error: error!)
                     return
                 }
                 if let selectedVC = self.selectedViewController as? TabBarCommonOperations {
@@ -67,9 +64,30 @@ class MainTabBarViewController: UITabBarController
         }
     }
     
-    func postLocationTapped(sender: AnyObject)
+    func postLocationTapped(sender: UIBarButtonItem)
     {
-        print("post")
+        let nextVCMethod = { (shouldOverwrite: Bool) in
+            let nextVC = self.storyboard!.instantiateViewControllerWithIdentifier("postLinkViewController") as! PostLinkViewController
+            nextVC.shouldOverwritePreviousPost = shouldOverwrite
+            self.presentViewController(nextVC, animated: true, completion: nil)
+        }
+        if let currentlyLoggedInUserHasPreviouslyPosted = StudentDataStore.currentlyLoggedInUserHasPreviouslyPosted {
+            if currentlyLoggedInUserHasPreviouslyPosted {
+                let alertController = UIAlertController(title: "Overwrite Previous Location?", message: "You have previously posted a location at which you're studying. Would you like to update that post, or would you like to post a new location?", preferredStyle: .Alert)
+                let overwriteButton = UIAlertAction(title: "Overwrite", style: .Default, handler: { _ in nextVCMethod(true) })
+                let newButton = UIAlertAction(title: "New", style: .Default, handler: { _ in nextVCMethod(false) })
+                alertController.addAction(overwriteButton)
+                alertController.addAction(newButton)
+                self.presentViewController(alertController, animated: true, completion: nil)
+            }
+            else {
+                nextVCMethod(false)
+            }
+        }
+        else {
+            NSLog("Cannot determine if the currently logged in user has previously posted.")
+            nextVCMethod(false)
+        }
     }
     
     func logoutTapped(sender: AnyObject)
@@ -85,13 +103,19 @@ class MainTabBarViewController: UITabBarController
                     self.navigationController?.popViewControllerAnimated(true)
                 }
                 else {
-                    let alertController = UIAlertController(title: "Logout Error", message: error?.localizedDescription, preferredStyle: .Alert)
-                    alertController.addAction(UIAlertAction(title: "Okay", style: .Default , handler: { _ in
-                        self.dismissViewControllerAnimated(true, completion: nil)
-                    }))
-                    self.presentViewController(alertController, animated: true, completion: nil)
+                    self.showErrorWithTitle("Logout Error", error: error!)
                 }
             }
         }
+    }
+    
+    // MARK: - Private Functions
+    private func showErrorWithTitle(title: String, error: NSError)
+    {
+        let alertController = UIAlertController(title: title, message: error.localizedDescription, preferredStyle: .Alert)
+        alertController.addAction(UIAlertAction(title: "Okay", style: .Default , handler: { _ in
+            self.dismissViewControllerAnimated(true, completion: nil)
+        }))
+        presentViewController(alertController, animated: true, completion: nil)
     }
 }

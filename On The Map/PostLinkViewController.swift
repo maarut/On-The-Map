@@ -10,5 +10,10 @@ import UIKit
 
 class PostLinkViewController: UIViewController
 {
+    var shouldOverwritePreviousPost = true
     
+    @IBAction func cancelTapped(sender: AnyObject)
+    {
+        dismissViewControllerAnimated(true, completion: nil)
+    }
 }

@@ -245,10 +245,10 @@
             </objects>
             <point key="canvasLocation" x="2218" y="659"/>
         </scene>
-        <!--View Controller-->
+        <!--Post Link View Controller-->
         <scene sceneID="AHN-Gt-6ep">
             <objects>
-                <viewController storyboardIdentifier="postLinkViewController" id="QGR-e2-dx4" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="postLinkViewController" id="QGR-e2-dx4" customClass="PostLinkViewController" customModule="On_The_Map" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Znz-KP-N70"/>
                         <viewControllerLayoutGuide type="bottom" id="W6S-zj-tA4"/>
@@ -256,8 +256,27 @@
                     <view key="view" contentMode="scaleToFill" id="d7o-wM-3Jw">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hop-1j-QCC">
+                                <rect key="frame" x="0.0" y="20" width="600" height="44"/>
+                                <items>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="owF-c3-kHf"/>
+                                    <barButtonItem systemItem="cancel" id="ozP-1L-tBj">
+                                        <connections>
+                                            <action selector="cancelTapped:" destination="QGR-e2-dx4" id="vOw-yS-6Pt"/>
+                                        </connections>
+                                    </barButtonItem>
+                                </items>
+                            </toolbar>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="hop-1j-QCC" secondAttribute="trailing" id="5Ow-t0-JPt"/>
+                            <constraint firstItem="hop-1j-QCC" firstAttribute="leading" secondItem="d7o-wM-3Jw" secondAttribute="leading" id="OM0-z5-jz7"/>
+                            <constraint firstItem="hop-1j-QCC" firstAttribute="top" secondItem="Znz-KP-N70" secondAttribute="bottom" id="jdv-Xa-8M6"/>
+                        </constraints>
                     </view>
+                    <toolbarItems/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hwT-pH-I4E" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

@@ -68,6 +68,17 @@ class LoginViewController: UIViewController
         UdacityClient.sharedInstance().login(usernameEntry.text!, password: passwordEntry.text!) { (didSucceed, error) in
             onMainQueueDo {
                 if didSucceed {
+                    ParseClient.sharedInstance().currentlyLoggedInUserHasPreviouslyPosted { (hasPreviouslyPosted, error) in
+                        guard error == nil else {
+                            NSLog("\(error!.description)")
+                            return
+                        }
+                        guard let hasPreviouslyPosted = hasPreviouslyPosted else {
+                            NSLog("Invalid response received")
+                            return
+                        }
+                        StudentDataStore.currentlyLoggedInUserHasPreviouslyPosted = hasPreviouslyPosted
+                    }
                     self.performSegueWithIdentifier("loggedInSegue", sender: self)
                 }
                 else {

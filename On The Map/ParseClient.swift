@@ -14,6 +14,7 @@ class ParseClient
     
     private init() { }
     
+    // MARK: - Singleton getter
     static func sharedInstance() -> ParseClient
     {
         struct DispatchOnce { static var token = 0; static var value: ParseClient? }
@@ -21,6 +22,7 @@ class ParseClient
         return DispatchOnce.value!
     }
     
+    // MARK: - Public Functions
     func getStudentData(completionHandler: ([StudentData]?, NSError?) -> Void)
     {
         let options: [String: AnyObject] = [StudentDataParameters.Limit: 100, StudentDataParameters.Order: "-\(StudentDataFields.UpdatedAt)"]
@@ -52,43 +54,31 @@ class ParseClient
         }
     }
     
-    // Generally to be used by UI code. Ensures a shorter timeout than NSURLSession.sharedSession()
-    func hasBeenPostedPreviously(studentData: StudentData, completionHandler: (Bool?, NSError?) -> Void)
+    func currentlyLoggedInUserHasPreviouslyPosted(completionHandler: (Bool?, NSError?) -> Void)
     {
+        guard let user = UdacityClient.sharedInstance().user else {
+            let userInfo = [NSLocalizedDescriptionKey: "User not logged in. Cannot complete request"]
+            completionHandler(nil, NSError(domain: "ParseClient.currentlyLoggedInUserHasPreviouslyPosted", code: 1, userInfo: userInfo))
+            return
+        }
+        let studentData = StudentData(objectId: nil, uniqueKey: "\(user.userId)", firstName: user.firstName, lastName: user.lastName, mapString: "", mediaURL: "", latitude: 0.0, longitude: 0.0)
+        
         if let _ = locallyCachedValueFor(studentData) {
             completionHandler(true, nil)
         }
         else {
-            // Hack to avoid using a specific URL session with a very short timeout to deal with this request.
-            let lock = NSLock()
-            var hasCompleted = false
-            let task = searchRemotelyForStudentData(studentData) { (oldValue, error) in
-                do {
-                    lock.lock()
-                    defer { lock.unlock() }
-                    if hasCompleted { return }
-                    hasCompleted = true
-                }
+            searchRemotelyForStudentData(studentData) { (oldValue, error) in
                 guard error == nil else {
                     completionHandler(nil, error!)
                     return
                 }
                 completionHandler(oldValue != nil, nil)
             }
-            after(3.seconds()) {
-                do {
-                    lock.lock()
-                    defer { lock.unlock() }
-                    if hasCompleted { return }
-                    hasCompleted = true
-                }
-                task.cancel()
-                completionHandler(false, nil)
-            }
         }
         
     }
     
+    // MARK: - Private Functions
     private func createStudentDataRemotely(studentData: StudentData, errorHandler: (NSError) -> Void)
     {
         taskForPOSTMethod(Methods.StudentLocation, studentData: studentData) {
@@ -103,7 +93,7 @@ class ParseClient
         task.resume()
     }
     
-    private func searchRemotelyForStudentData(studentData: StudentData, completionHandler: (StudentData?, NSError?) -> Void) -> NSURLSessionDataTask
+    private func searchRemotelyForStudentData(studentData: StudentData, completionHandler: (StudentData?, NSError?) -> Void)
     {
         let condition: [String: AnyObject] = [StudentDataFields.UniqueKey: studentData.uniqueKey]
         let json: NSData!
@@ -115,7 +105,7 @@ class ParseClient
             json = nil
         }
         let conditionString = NSString(data: json, encoding: NSUTF8StringEncoding)!
-        return getStudentDataWithOptions([StudentDataParameters.Where: conditionString]) { (searchResults, error) in
+        getStudentDataWithOptions([StudentDataParameters.Where: conditionString]) { (searchResults, error) in
             guard error == nil else {
                 completionHandler(nil, error!)
                 return
@@ -142,7 +132,7 @@ class ParseClient
         return nil
     }
     
-    private func getStudentDataWithOptions(options: [String: AnyObject], completionHandler: ([StudentData]?, NSError?) -> Void) -> NSURLSessionDataTask
+    private func getStudentDataWithOptions(options: [String: AnyObject], completionHandler: ([StudentData]?, NSError?) -> Void)
     {
         let task = taskForGETMethod(Methods.StudentLocation, parameters: options) { (data, error) in
             func sendError(errorStr: String)
@@ -174,6 +164,5 @@ class ParseClient
             
         }
         task.resume()
-        return task
     }
 }

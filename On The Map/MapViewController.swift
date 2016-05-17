@@ -160,6 +160,7 @@ extension MapViewController: TabBarCommonOperations
 {
     func refreshTapped(sender: AnyObject)
     {
+        mapView.removeAnnotations(mapView.annotations)
         mapView.addAnnotations(pinsForLocations())
     }
 }
