@@ -105,11 +105,6 @@ class LoginViewController: UIViewController
         }
     }
     
-    @IBAction func desp(sender: AnyObject)
-    {
-        performSegueWithIdentifier("loggedInSegue", sender: self)
-    }
-    
     // MARK: - Private Functions
     private func resignFirstResponderForTextFields() -> Bool
     {
