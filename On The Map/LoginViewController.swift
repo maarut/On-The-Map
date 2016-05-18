@@ -28,10 +28,10 @@ class LoginViewController: UIViewController
         noAccountLabel.attributedText = noAccountText
         [usernameEntry, passwordEntry].forEach {
             $0.layer.borderColor = UIColor.whiteColor().CGColor
-            $0.layer.borderWidth = 1.0
+            $0.layer.borderWidth = 2.0
         }
         loginButton.setTitleColor(UIColor.lightTextColor(), forState: .Disabled)
-        addGradientToView()
+        addGradientToViewWithSize(view.bounds.size)
     }
     
     override func viewWillAppear(animated: Bool)
@@ -46,6 +46,12 @@ class LoginViewController: UIViewController
     {
         super.viewDidAppear(animated)
         resignFirstResponderForTextFields()
+    }
+    
+    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator)
+    {
+        super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
+        addGradientToViewWithSize(size)
     }
     
     // MARK: - IBActions
@@ -117,12 +123,18 @@ class LoginViewController: UIViewController
         return false
     }
     
-    private func addGradientToView()
+    private func addGradientToViewWithSize(size: CGSize)
     {
         let gradient = CAGradientLayer()
-        gradient.frame = view.bounds
+        gradient.frame = CGRectMake(0, 0, size.width, size.height)
         gradient.colors = [view.backgroundColor!.CGColor, UIColor(red: 1.0, green: 200.0/255.0, blue: 0.0, alpha: 1).CGColor]
-        view.layer.insertSublayer(gradient, atIndex: 0)
+        let gradients = view.layer.sublayers?.filter { $0.isKindOfClass(CAGradientLayer) }
+        if let previousGradient = gradients?.first {
+            view.layer.replaceSublayer(previousGradient, with: gradient)
+        }
+        else {
+            view.layer.insertSublayer(gradient, atIndex: 0)
+        }
     }
 
 }
