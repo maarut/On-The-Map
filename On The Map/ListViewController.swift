@@ -59,13 +59,13 @@ extension ListViewController: UITableViewDelegate
             }
             else {
                 let alertController = UIAlertController(title: "Couldn't open URL", message: "The system was not able to open URL - \"\(studentData.mediaURL)\"", preferredStyle: .Alert)
-                alertController.addAction(UIAlertAction(title: "Okay", style: .Default, handler: { _ in self.dismissViewControllerAnimated(true, completion: nil) }))
+                alertController.addAction(UIAlertAction(title: "Dismiss", style: .Default, handler: { _ in self.dismissViewControllerAnimated(true, completion: nil) }))
                 self.presentViewController(alertController, animated: true, completion: nil)
             }
         }
         else {
             let alertController = UIAlertController(title: "Couldn't open URL", message: "URL \"\(studentData.mediaURL)\" is not a valid URL", preferredStyle: .Alert)
-            alertController.addAction(UIAlertAction(title: "Okay", style: .Default, handler: { _ in self.dismissViewControllerAnimated(true, completion: nil) }))
+            alertController.addAction(UIAlertAction(title: "Dismiss", style: .Default, handler: { _ in self.dismissViewControllerAnimated(true, completion: nil) }))
             self.presentViewController(alertController, animated: true, completion: nil)
         }
         tableView.deselectRowAtIndexPath(indexPath, animated: true)

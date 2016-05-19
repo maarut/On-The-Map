@@ -8,6 +8,7 @@
 
 import UIKit
 import MapKit
+import CoreLocation
 
 class PostLinkViewController: UIViewController
 {
@@ -23,6 +24,8 @@ class PostLinkViewController: UIViewController
     
     var shouldOverwritePreviousPost = true
     private var textFieldPlaceHolderText = "Enter Location Here"
+    private var canUseCurrentLocationButton = true
+    private var locationManager = CLLocationManager()
     
     // MARK: - Overrides
     override func viewDidLoad()
@@ -31,13 +34,26 @@ class PostLinkViewController: UIViewController
         for button in [useCurrentLocationButton, findOnTheMapButton, submitButton] {
             button.layer.cornerRadius = 5.0
         }
+        switch CLLocationManager.authorizationStatus() {
+        case .AuthorizedAlways, .AuthorizedWhenInUse:
+            canUseCurrentLocationButton = true
+            useCurrentLocationButton.hidden = false
+            useCurrentLocationButton.enabled = true
+            break
+        default:
+            canUseCurrentLocationButton = false
+            useCurrentLocationButton.hidden = true
+            useCurrentLocationButton.enabled = false
+            break
+        }
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
     }
     
     override func viewWillAppear(animated: Bool)
     {
         super.viewWillAppear(animated)
         view.backgroundColor = UIColor(hexValue: 0xEFEFF4)
-        [titleLabel, locationEntryField, findOnTheMapButton, useCurrentLocationButton].forEach {
+        [titleLabel, locationEntryField, findOnTheMapButton].forEach {
             $0.hidden = false
             $0.alpha = 1.0
         }
@@ -46,7 +62,12 @@ class PostLinkViewController: UIViewController
             $0.alpha = 0.0
         }
         [urlEntry, submitButton].forEach { $0.enabled = false }
-        [findOnTheMapButton, useCurrentLocationButton].forEach { $0.enabled = true }
+        findOnTheMapButton.enabled = true
+        if canUseCurrentLocationButton {
+            useCurrentLocationButton.hidden = false
+            useCurrentLocationButton.enabled = true
+            useCurrentLocationButton.alpha = 1.0
+        }
         cancelButton.setTitleColor(nil, forState: .Normal)
     }
     
@@ -65,12 +86,59 @@ class PostLinkViewController: UIViewController
     
     @IBAction func submitTapped(sender: AnyObject)
     {
-        
+        guard urlEntry.text != nil && !urlEntry.text!.isEmpty else {
+            let alert = UIAlertController(title: "URL Not Provided", message: "A URL has not been provided and is required to post data. Please provide a URL.", preferredStyle: .Alert)
+            alert.addAction(UIAlertAction(title: "Dismiss", style: .Default, handler: { _ in } ))
+            presentViewController(alert, animated: true, completion: nil)
+            return
+        }
+        if let user = UdacityClient.sharedInstance().user, let location = mapView.annotations.first as? MKPointAnnotation {
+            
+            let studentData = StudentData(objectId: nil,
+                                          uniqueKey: "\(user.userId)",
+                                          firstName: user.firstName,
+                                          lastName: user.lastName,
+                                          mapString: location.title!,
+                                          mediaURL: urlEntry.text!,
+                                          latitude: Float(location.coordinate.latitude),
+                                          longitude: Float(location.coordinate.longitude))
+            
+            ParseClient.sharedInstance().postStudentData(studentData, overwritingPreviousValue: shouldOverwritePreviousPost) { (error) in
+                NSLog("\(error)")
+            }
+        }
+        else {
+            NSLog("User not logged in, or location not provided")
+        }
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
     
     @IBAction func useCurrentLocationTapped(sender: AnyObject)
     {
-        transitionToMapView()
+        if let currentLocation = locationManager.location {
+            let geocoder = CLGeocoder()
+            geocoder.reverseGeocodeLocation(currentLocation) { (placemarks, error) in
+                guard error == nil else {
+                    NSLog("\(error!)\n\(error!.localizedDescription)")
+                    return
+                }
+                guard let placemarks = placemarks else {
+                    let userInfo = [NSLocalizedDescriptionKey: "No placemarks returned."]
+                    let newError = NSError(domain: "PostLinkViewController.useCurrentLocationTapped", code: 1, userInfo: userInfo)
+                    NSLog("\(newError)\n\(newError.localizedDescription)")
+                    return
+                }
+                if let placemark = placemarks.first {
+                    self.transitionToMapView()
+                    let annotation = MKPointAnnotation()
+                    annotation.coordinate = currentLocation.coordinate
+                    annotation.title = placemark.name
+                    self.locationEntryField.text = placemark.name
+                    self.mapView.addAnnotation(annotation)
+                    self.mapView.setRegion(MKCoordinateRegionMakeWithDistance(currentLocation.coordinate, 1000, 1000), animated: true)
+                }
+            }
+        }
     }
     
     @IBAction func cancelTapped(sender: AnyObject)

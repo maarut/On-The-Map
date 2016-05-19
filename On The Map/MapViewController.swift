@@ -57,7 +57,7 @@ class MapViewController: UIViewController
     // MARK: - Private Methods
     private func updateLocationOnMap()
     {
-        let currentLocation = self.locationManager.location
+        let currentLocation = locationManager.location
         if currentLocation != nil && !StudentDataStore.studentData.isEmpty {
             onMainQueueDo {
                 self.mapView.setRegion(self.coordinateRegionForStudentData(
@@ -122,13 +122,13 @@ extension MapViewController: MKMapViewDelegate
                 }
                 else {
                     let alertController = UIAlertController(title: "Couldn't open URL", message: "The system was not able to open URL - \"\(urlStr)\"", preferredStyle: .Alert)
-                    alertController.addAction(UIAlertAction(title: "Okay", style: .Default, handler: { _ in self.dismissViewControllerAnimated(true, completion: nil) }))
+                    alertController.addAction(UIAlertAction(title: "Dismiss", style: .Default, handler: { _ in self.dismissViewControllerAnimated(true, completion: nil) }))
                     self.presentViewController(alertController, animated: true, completion: nil)
                 }
             }
             else {
                 let alertController = UIAlertController(title: "Couldn't open URL", message: "URL \"\(view.annotation?.subtitle ?? "")\" is not a valid URL", preferredStyle: .Alert)
-                alertController.addAction(UIAlertAction(title: "Okay", style: .Default, handler: { _ in self.dismissViewControllerAnimated(true, completion: nil) }))
+                alertController.addAction(UIAlertAction(title: "Dismiss", style: .Default, handler: { _ in self.dismissViewControllerAnimated(true, completion: nil) }))
                 self.presentViewController(alertController, animated: true, completion: nil)
             }
         }

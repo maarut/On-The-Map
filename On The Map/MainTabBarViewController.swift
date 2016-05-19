@@ -85,8 +85,8 @@ class MainTabBarViewController: UITabBarController
             }
         }
         else {
-            NSLog("Cannot determine if the currently logged in user has previously posted.")
-            nextVCMethod(false)
+            NSLog("Cannot determine if the currently logged in user has previously posted. Overwriting existing location if it exists.")
+            nextVCMethod(true)
         }
     }
     
@@ -113,7 +113,7 @@ class MainTabBarViewController: UITabBarController
     private func showErrorWithTitle(title: String, error: NSError)
     {
         let alertController = UIAlertController(title: title, message: error.localizedDescription, preferredStyle: .Alert)
-        alertController.addAction(UIAlertAction(title: "Okay", style: .Default , handler: { _ in
+        alertController.addAction(UIAlertAction(title: "Dismiss", style: .Default , handler: { _ in
             self.dismissViewControllerAnimated(true, completion: nil)
         }))
         presentViewController(alertController, animated: true, completion: nil)

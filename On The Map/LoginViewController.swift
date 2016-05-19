@@ -101,7 +101,7 @@ class LoginViewController: UIViewController
                     else {
                         alertController = UIAlertController(title: "Login Error", message: error!.localizedDescription, preferredStyle: .Alert)
                     }
-                    alertController.addAction(UIAlertAction(title: "Okay", style: .Default, handler: { _ in self.dismissViewControllerAnimated(true, completion: nil) } ))
+                    alertController.addAction(UIAlertAction(title: "Dismiss", style: .Default, handler: { _ in self.dismissViewControllerAnimated(true, completion: nil) } ))
                     self.presentViewController(alertController, animated: true, completion: nil)
                 }
                 self.loginButton.enabled = true
