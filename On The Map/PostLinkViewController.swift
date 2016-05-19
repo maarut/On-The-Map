@@ -22,6 +22,7 @@ class PostLinkViewController: UIViewController
     @IBOutlet weak var titleLabel: UILabel!
     
     var shouldOverwritePreviousPost = true
+    private var textFieldPlaceHolderText = "Enter Location Here"
     
     // MARK: - Overrides
     override func viewDidLoad()
@@ -52,13 +53,43 @@ class PostLinkViewController: UIViewController
     // MARK: - IBActions
     @IBAction func findLocationTapped(sender: AnyObject)
     {
-        guard locationEntryField.text != nil && !locationEntryField.text!.isEmpty else {
+        guard locationEntryField.text != nil && !locationEntryField.text!.isEmpty && locationEntryField.text != textFieldPlaceHolderText else {
             let alert = UIAlertController(title: "Location Not Provided", message: "A location has not been provided. Please either enter a location, or request to use the current location.", preferredStyle: .Alert)
-            alert.addAction(UIAlertAction(title: "Enter Location", style: .Default, handler: nil))
+            alert.addAction(UIAlertAction(title: "Enter Location", style: .Default, handler: { _ in self.locationEntryField.becomeFirstResponder() } ))
             alert.addAction(UIAlertAction(title: "Use Current Location", style: .Default, handler: { _ in self.useCurrentLocationTapped(self) }))
             presentViewController(alert, animated: true, completion: nil)
             return
         }
+        transitionToMapView()
+    }
+    
+    @IBAction func submitTapped(sender: AnyObject)
+    {
+        
+    }
+    
+    @IBAction func useCurrentLocationTapped(sender: AnyObject)
+    {
+        transitionToMapView()
+    }
+    
+    @IBAction func cancelTapped(sender: AnyObject)
+    {
+        dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    @IBAction func tapRecognised(sender: UITapGestureRecognizer)
+    {
+        let tapLocation = locationEntryField.convertPoint(sender.locationInView(self.view), fromView: self.view)
+        
+        if !locationEntryField.pointInside(tapLocation, withEvent: nil) {
+            locationEntryField.resignFirstResponder()
+        }
+    }
+    
+    // MARK: - Private Methods
+    private func transitionToMapView()
+    {
         [mapView, urlEntry, submitButton].forEach { $0.hidden = false }
         UIView.animateWithDuration(0.5, animations: {
             self.view.backgroundColor = UIColor(hexValue: 0x3B5998)
@@ -75,30 +106,6 @@ class PostLinkViewController: UIViewController
                 }
         })
     }
-    
-    @IBAction func submitTapped(sender: AnyObject)
-    {
-        
-    }
-    
-    @IBAction func useCurrentLocationTapped(sender: AnyObject)
-    {
-        
-    }
-    
-    @IBAction func cancelTapped(sender: AnyObject)
-    {
-        dismissViewControllerAnimated(true, completion: nil)
-    }
-    
-    @IBAction func tapRecognised(sender: UITapGestureRecognizer)
-    {
-        let tapLocation = locationEntryField.convertPoint(sender.locationInView(self.view), fromView: self.view)
-        
-        if !locationEntryField.pointInside(tapLocation, withEvent: nil) {
-            locationEntryField.resignFirstResponder()
-        }
-    }
 }
 
 // MARK: - UITextViewDelegate Implementation
@@ -106,8 +113,27 @@ extension PostLinkViewController: UITextViewDelegate
 {
     func textViewShouldBeginEditing(textView: UITextView) -> Bool
     {
-        textView.text = ""
-        textView.textColor = UIColor.whiteColor()
+        if textView.text == textFieldPlaceHolderText {
+            textView.text = ""
+            textView.textColor = UIColor.whiteColor()
+        }
+        return true
+    }
+    
+    func textViewDidEndEditing(textView: UITextView)
+    {
+        if textView.text.isEmpty {
+            textView.text = textFieldPlaceHolderText
+            textView.textColor = UIColor.lightTextColor()
+        }
+    }
+    
+    func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool
+    {
+        if text == "\n" {
+            textView.resignFirstResponder()
+            return false
+        }
         return true
     }
 }
