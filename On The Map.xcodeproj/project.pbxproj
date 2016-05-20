@@ -19,7 +19,6 @@
 		E30C5DC61CCEA48800B99D93 /* UdacityUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E30C5DC51CCEA48800B99D93 /* UdacityUser.swift */; };
 		E30C5DC81CD00A1300B99D93 /* MainTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E30C5DC71CD00A1300B99D93 /* MainTabBarViewController.swift */; };
 		E317FE521CE91C370088EF1C /* Dispatch+utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E317FE511CE91C370088EF1C /* Dispatch+utils.swift */; };
-		E317FE541CEB4CF60088EF1C /* DevelopmentShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = E317FE531CEB4CF60088EF1C /* DevelopmentShortcuts.swift */; };
 		E32053CD1CD913FE00859DB2 /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E32053CC1CD913FE00859DB2 /* ListViewController.swift */; };
 		E32053D01CD9167800859DB2 /* TabBarCommonOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = E32053CF1CD9167800859DB2 /* TabBarCommonOperations.swift */; };
 		E32053D21CE249E200859DB2 /* StudentDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E32053D11CE249E200859DB2 /* StudentDataStore.swift */; };
@@ -61,7 +60,6 @@
 		E30C5DC51CCEA48800B99D93 /* UdacityUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UdacityUser.swift; sourceTree = "<group>"; };
 		E30C5DC71CD00A1300B99D93 /* MainTabBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTabBarViewController.swift; sourceTree = "<group>"; };
 		E317FE511CE91C370088EF1C /* Dispatch+utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Dispatch+utils.swift"; sourceTree = "<group>"; };
-		E317FE531CEB4CF60088EF1C /* DevelopmentShortcuts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DevelopmentShortcuts.swift; sourceTree = "<group>"; };
 		E32053CC1CD913FE00859DB2 /* ListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 		E32053CF1CD9167800859DB2 /* TabBarCommonOperations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarCommonOperations.swift; sourceTree = "<group>"; };
 		E32053D11CE249E200859DB2 /* StudentDataStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StudentDataStore.swift; sourceTree = "<group>"; };
@@ -200,7 +198,6 @@
 				E32053D41CE24E1D00859DB2 /* MKCoordinateRegion+utils.swift */,
 				E32053D81CE73E4C00859DB2 /* SequenceType+utils.swift */,
 				E317FE511CE91C370088EF1C /* Dispatch+utils.swift */,
-				E317FE531CEB4CF60088EF1C /* DevelopmentShortcuts.swift */,
 				E3538DD81CEC87070065FC46 /* UIColor+utils.swift */,
 			);
 			name = utils;
@@ -340,7 +337,6 @@
 				E32053D01CD9167800859DB2 /* TabBarCommonOperations.swift in Sources */,
 				E38306921CD8CB4600C103D2 /* MapViewController.swift in Sources */,
 				E3538DD91CEC87070065FC46 /* UIColor+utils.swift in Sources */,
-				E317FE541CEB4CF60088EF1C /* DevelopmentShortcuts.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

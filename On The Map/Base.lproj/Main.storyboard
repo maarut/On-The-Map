@@ -75,13 +75,6 @@
                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="ybj-Si-ghp">
                                 <rect key="frame" x="290" y="366" width="20" height="20"/>
                             </activityIndicatorView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ojg-bs-iyn">
-                                <rect key="frame" x="277" y="562" width="46" height="30"/>
-                                <state key="normal" title="Button"/>
-                                <connections>
-                                    <action selector="desp:" destination="BYZ-38-t0r" eventType="touchUpInside" id="45i-Qq-MU5"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="0.72549019607843135" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
@@ -96,14 +89,12 @@
                             <constraint firstItem="W4m-58-hLF" firstAttribute="trailing" secondItem="XWJ-CJ-kB3" secondAttribute="trailing" id="X6o-Or-UPw"/>
                             <constraint firstItem="3Ef-xJ-Xyu" firstAttribute="trailing" secondItem="s5A-fS-AiP" secondAttribute="trailing" id="amw-Mh-vr3"/>
                             <constraint firstItem="3Ef-xJ-Xyu" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="8" symbolic="YES" id="b50-bV-ocA"/>
-                            <constraint firstItem="Ojg-bs-iyn" firstAttribute="centerX" secondItem="CXN-4Z-AQp" secondAttribute="centerX" id="cB5-a2-2Cp"/>
                             <constraint firstItem="W4m-58-hLF" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="dpa-8f-NGL"/>
                             <constraint firstItem="s5A-fS-AiP" firstAttribute="top" secondItem="3Ef-xJ-Xyu" secondAttribute="bottom" constant="8" symbolic="YES" id="gbp-9r-Gqd"/>
                             <constraint firstItem="VME-o9-0D3" firstAttribute="top" secondItem="XWJ-CJ-kB3" secondAttribute="bottom" constant="8" symbolic="YES" id="jwe-Fy-bMo"/>
                             <constraint firstItem="3Ef-xJ-Xyu" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="kGQ-3V-b7J"/>
                             <constraint firstItem="XWJ-CJ-kB3" firstAttribute="leading" secondItem="VME-o9-0D3" secondAttribute="leading" id="mo0-lf-5B4"/>
                             <constraint firstItem="s5A-fS-AiP" firstAttribute="leading" secondItem="W4m-58-hLF" secondAttribute="leading" id="mtC-dr-QvL"/>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="Ojg-bs-iyn" secondAttribute="bottom" constant="8" symbolic="YES" id="nd6-4x-iau"/>
                             <constraint firstItem="W4m-58-hLF" firstAttribute="top" secondItem="s5A-fS-AiP" secondAttribute="bottom" constant="8" symbolic="YES" id="oba-CM-5vv"/>
                             <constraint firstItem="3Ef-xJ-Xyu" firstAttribute="leading" secondItem="s5A-fS-AiP" secondAttribute="leading" id="rgK-s1-EEf"/>
                             <constraint firstItem="XWJ-CJ-kB3" firstAttribute="trailing" secondItem="VME-o9-0D3" secondAttribute="trailing" id="tUH-oV-QeH"/>
@@ -153,11 +144,11 @@
                                         <rect key="frame" x="0.0" y="28" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hNP-gH-nG4" id="khb-aO-MF4">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="hOE-FD-iH9">
-                                                    <rect key="frame" x="15" y="0.0" width="570" height="43"/>
+                                                    <rect key="frame" x="15" y="0.0" width="570" height="43.5"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -337,7 +328,10 @@ Cg
                                 <rect key="frame" x="0.0" y="61" width="600" height="100"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="28"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="URL" returnKeyType="send"/>
+                                <connections>
+                                    <outlet property="delegate" destination="QGR-e2-dx4" id="sw6-EP-j5R"/>
+                                </connections>
                             </textField>
                             <mapView hidden="YES" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" verticalHuggingPriority="249" mapType="standard" zoomEnabled="NO" scrollEnabled="NO" rotateEnabled="NO" pitchEnabled="NO" showsBuildings="NO" showsPointsOfInterest="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rR9-Hr-XIf">
                                 <rect key="frame" x="0.0" y="169" width="600" height="347"/>

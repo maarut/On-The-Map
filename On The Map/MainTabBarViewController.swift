@@ -51,8 +51,10 @@ class MainTabBarViewController: UITabBarController
     // MARK: - Public Functions
     func refreshTapped(sender: AnyObject)
     {
+        refreshItemsButton.enabled = false
         StudentDataStore.refreshStudentDataWithCompletionHandler { (didSucceed, error) in
             onMainQueueDo {
+                self.refreshItemsButton.enabled = true
                 guard didSucceed else {
                     self.showErrorWithTitle("Data Fetch Error", error: error!)
                     return
@@ -66,27 +68,27 @@ class MainTabBarViewController: UITabBarController
     
     func postLocationTapped(sender: UIBarButtonItem)
     {
-        let nextVCMethod = { (shouldOverwrite: Bool) in
+        let displayPostLocationVCOverridingExistingPostOnSubmit = { (shouldOverwrite: Bool?) in
             let nextVC = self.storyboard!.instantiateViewControllerWithIdentifier("postLinkViewController") as! PostLinkViewController
             nextVC.shouldOverwritePreviousPost = shouldOverwrite
             self.presentViewController(nextVC, animated: true, completion: nil)
         }
-        if let currentlyLoggedInUserHasPreviouslyPosted = StudentDataStore.currentlyLoggedInUserHasPreviouslyPosted {
-            if currentlyLoggedInUserHasPreviouslyPosted {
-                let alertController = UIAlertController(title: "Overwrite Previous Location?", message: "You have previously posted a location at which you're studying. Would you like to update that post, or would you like to post a new location?", preferredStyle: .Alert)
-                let overwriteButton = UIAlertAction(title: "Overwrite", style: .Default, handler: { _ in nextVCMethod(true) })
-                let newButton = UIAlertAction(title: "New", style: .Default, handler: { _ in nextVCMethod(false) })
-                alertController.addAction(overwriteButton)
-                alertController.addAction(newButton)
-                self.presentViewController(alertController, animated: true, completion: nil)
-            }
-            else {
-                nextVCMethod(false)
-            }
-        }
-        else {
-            NSLog("Cannot determine if the currently logged in user has previously posted. Overwriting existing location if it exists.")
-            nextVCMethod(true)
+        switch StudentDataStore.currentlyLoggedInUsersPreviousPost {
+        case .Undetermined:
+            NSLog("Cannot determine if the currently logged in user has previously posted. A further check will be made before submitting the post.")
+            displayPostLocationVCOverridingExistingPostOnSubmit(nil)
+            break
+        case .NeverPosted:
+            displayPostLocationVCOverridingExistingPostOnSubmit(false)
+            break
+        case .HasPosted:
+            let alertController = UIAlertController(title: "Overwrite Previous Location?", message: "You have previously posted a location at which you're studying. Would you like to update that post, or would you like to post a new location?", preferredStyle: .Alert)
+            let overwriteButton = UIAlertAction(title: "Overwrite", style: .Default, handler: { _ in displayPostLocationVCOverridingExistingPostOnSubmit(true) })
+            let newButton = UIAlertAction(title: "New", style: .Default, handler: { _ in displayPostLocationVCOverridingExistingPostOnSubmit(false) })
+            alertController.addAction(overwriteButton)
+            alertController.addAction(newButton)
+            self.presentViewController(alertController, animated: true, completion: nil)
+            break
         }
     }
     
@@ -114,7 +116,7 @@ class MainTabBarViewController: UITabBarController
     {
         let alertController = UIAlertController(title: title, message: error.localizedDescription, preferredStyle: .Alert)
         alertController.addAction(UIAlertAction(title: "Dismiss", style: .Default , handler: { _ in
-            self.dismissViewControllerAnimated(true, completion: nil)
+//            self.dismissViewControllerAnimated(true, completion: nil)
         }))
         presentViewController(alertController, animated: true, completion: nil)
     }

@@ -10,12 +10,18 @@ import UIKit
 import MapKit
 import CoreLocation
 
+enum PreviousPost {
+    case Undetermined
+    case NeverPosted
+    case HasPosted(previousPost: StudentData)
+}
+
 class StudentDataStore
 {
     static var locationDistanceLimit: CLLocationDistance = 1000000.0
     static var studentDataLimit = 100
     static private (set) var studentData: [StudentData] = []
-    static var currentlyLoggedInUserHasPreviouslyPosted: Bool?
+    static var currentlyLoggedInUsersPreviousPost = PreviousPost.Undetermined
     
     private init() { }
     

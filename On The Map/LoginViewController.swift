@@ -74,16 +74,12 @@ class LoginViewController: UIViewController
         UdacityClient.sharedInstance().login(usernameEntry.text!, password: passwordEntry.text!) { (didSucceed, error) in
             onMainQueueDo {
                 if didSucceed {
-                    ParseClient.sharedInstance().currentlyLoggedInUserHasPreviouslyPosted { (hasPreviouslyPosted, error) in
+                    ParseClient.sharedInstance().getCurrentlyLoggedInUsersPreviousPost { (oldPost, error) in
                         guard error == nil else {
                             NSLog("\(error!.description)")
                             return
                         }
-                        guard let hasPreviouslyPosted = hasPreviouslyPosted else {
-                            NSLog("Invalid response received")
-                            return
-                        }
-                        StudentDataStore.currentlyLoggedInUserHasPreviouslyPosted = hasPreviouslyPosted
+                        StudentDataStore.currentlyLoggedInUsersPreviousPost = oldPost == nil ? PreviousPost.NeverPosted : PreviousPost.HasPosted(previousPost: oldPost!)
                     }
                     self.performSegueWithIdentifier("loggedInSegue", sender: self)
                 }
@@ -101,7 +97,7 @@ class LoginViewController: UIViewController
                     else {
                         alertController = UIAlertController(title: "Login Error", message: error!.localizedDescription, preferredStyle: .Alert)
                     }
-                    alertController.addAction(UIAlertAction(title: "Dismiss", style: .Default, handler: { _ in self.dismissViewControllerAnimated(true, completion: nil) } ))
+                    alertController.addAction(UIAlertAction(title: "Dismiss", style: .Default, handler: { _ in } ))
                     self.presentViewController(alertController, animated: true, completion: nil)
                 }
                 self.loginButton.enabled = true
@@ -127,7 +123,7 @@ class LoginViewController: UIViewController
     {
         let gradient = CAGradientLayer()
         gradient.frame = CGRectMake(0, 0, size.width, size.height)
-        gradient.colors = [view.backgroundColor!.CGColor, UIColor(red: 1.0, green: 200.0/255.0, blue: 0.0, alpha: 1).CGColor]
+        gradient.colors = [view.backgroundColor!.CGColor, UIColor(hexValue: 0xFFDF00).CGColor]
         let gradients = view.layer.sublayers?.filter { $0.isKindOfClass(CAGradientLayer) }
         if let previousGradient = gradients?.first {
             view.layer.replaceSublayer(previousGradient, with: gradient)

@@ -54,7 +54,7 @@ class ParseClient
         }
     }
     
-    func currentlyLoggedInUserHasPreviouslyPosted(completionHandler: (Bool?, NSError?) -> Void)
+    func getCurrentlyLoggedInUsersPreviousPost(completionHandler: (StudentData?, NSError?) -> Void)
     {
         guard let user = UdacityClient.sharedInstance().user else {
             let userInfo = [NSLocalizedDescriptionKey: "User not logged in. Cannot complete request"]
@@ -63,8 +63,8 @@ class ParseClient
         }
         let studentData = StudentData(objectId: nil, uniqueKey: "\(user.userId)", firstName: user.firstName, lastName: user.lastName, mapString: "", mediaURL: "", latitude: 0.0, longitude: 0.0)
         
-        if let _ = locallyCachedValueFor(studentData) {
-            completionHandler(true, nil)
+        if let oldValue = locallyCachedValueFor(studentData) {
+            completionHandler(oldValue, nil)
         }
         else {
             searchRemotelyForStudentData(studentData) { (oldValue, error) in
@@ -72,7 +72,7 @@ class ParseClient
                     completionHandler(nil, error!)
                     return
                 }
-                completionHandler(oldValue != nil, nil)
+                completionHandler(oldValue, nil)
             }
         }
         
