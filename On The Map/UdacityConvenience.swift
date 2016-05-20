@@ -113,7 +113,8 @@ extension UdacityClient
         }
         catch {
             json = nil
-            NSLog("Could not construct JSON out of data: \(error as NSError)")
+            let e = error as NSError
+            NSLog("Could not construct JSON out of data: \(e.description)\n\(e.localizedDescription)")
         }
         request.HTTPBody = json
         

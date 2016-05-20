@@ -76,7 +76,7 @@ class LoginViewController: UIViewController
                 if didSucceed {
                     ParseClient.sharedInstance().getCurrentlyLoggedInUsersPreviousPost { (oldPost, error) in
                         guard error == nil else {
-                            NSLog("\(error!.description)")
+                            NSLog(error!.description + "\n" + error!.localizedDescription)
                             return
                         }
                         StudentDataStore.currentlyLoggedInUsersPreviousPost = oldPost == nil ? PreviousPost.NeverPosted : PreviousPost.HasPosted(previousPost: oldPost!)
@@ -99,6 +99,7 @@ class LoginViewController: UIViewController
                     }
                     alertController.addAction(UIAlertAction(title: "Dismiss", style: .Default, handler: { _ in } ))
                     self.presentViewController(alertController, animated: true, completion: nil)
+                    NSLog(error!.description + "\n" + error!.localizedDescription)
                 }
                 self.loginButton.enabled = true
                 self.activityIndicator.stopAnimating()

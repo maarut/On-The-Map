@@ -35,7 +35,10 @@ class MainTabBarViewController: UITabBarController
         super.viewWillAppear(animated)
         navigationController?.navigationBarHidden = false
         StudentDataStore.refreshStudentDataWithCompletionHandler { (didSucceed, error) in
-            if !didSucceed { NSLog(error!.localizedDescription); return }
+            if !didSucceed {
+                NSLog(error!.description + "\n" + error!.localizedDescription)
+                return
+            }
             if let selectedVC = self.selectedViewController as? TabBarCommonOperations {
                 onMainQueueDo { selectedVC.refreshTapped(self) }
             }
@@ -115,9 +118,8 @@ class MainTabBarViewController: UITabBarController
     private func showErrorWithTitle(title: String, error: NSError)
     {
         let alertController = UIAlertController(title: title, message: error.localizedDescription, preferredStyle: .Alert)
-        alertController.addAction(UIAlertAction(title: "Dismiss", style: .Default , handler: { _ in
-//            self.dismissViewControllerAnimated(true, completion: nil)
-        }))
+        alertController.addAction(UIAlertAction(title: "Dismiss", style: .Default , handler: { _ in }))
         presentViewController(alertController, animated: true, completion: nil)
+        NSLog(error.description + "\n" + error.localizedDescription)
     }
 }

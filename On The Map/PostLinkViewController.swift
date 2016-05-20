@@ -21,6 +21,7 @@ class PostLinkViewController: UIViewController
     @IBOutlet weak var urlEntry: UITextField!
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var findOnTheMapActivityIndicator: UIActivityIndicatorView!
     
     var shouldOverwritePreviousPost: Bool?
     private var textFieldPlaceHolderText = "Enter Location Here"
@@ -53,15 +54,15 @@ class PostLinkViewController: UIViewController
     {
         super.viewWillAppear(animated)
         view.backgroundColor = UIColor(hexValue: 0xEFEFF4)
-        [titleLabel, locationEntryField, findOnTheMapButton].forEach {
-            $0.hidden = false
-            $0.alpha = 1.0
+        for item in [titleLabel, locationEntryField, findOnTheMapButton] {
+            item.hidden = false
+            item.alpha = 1.0
         }
-        [mapView, urlEntry, submitButton].forEach {
-            $0.hidden = true
-            $0.alpha = 0.0
+        for item in [mapView, urlEntry, submitButton] {
+            item.hidden = true
+            item.alpha = 0.0
         }
-        [urlEntry, submitButton].forEach { $0.enabled = false }
+        for item in [urlEntry, submitButton] { item.enabled = false }
         findOnTheMapButton.enabled = true
         if canUseCurrentLocationButton {
             useCurrentLocationButton.hidden = false
@@ -84,12 +85,17 @@ class PostLinkViewController: UIViewController
             return
         }
         findOnTheMapButton.enabled = false
+        findOnTheMapButton.setTitle("", forState: .Normal)
+        findOnTheMapActivityIndicator.hidden = false
+        findOnTheMapActivityIndicator.startAnimating()
         let geocoder = CLGeocoder()
         geocoder.geocodeAddressString(locationEntryField.text!) { (placemarks, error) in
             self.findOnTheMapButton.enabled = true
+            self.findOnTheMapButton.setTitle("Find On The Map", forState: .Normal)
+            self.findOnTheMapActivityIndicator.stopAnimating()
             guard error == nil else {
                 self.showErrorWithTitle("Error Occured", message: error!.localizedDescription)
-                NSLog(error!.description)
+                NSLog(error!.description + "\n" + error!.localizedDescription)
                 return
             }
             if let placemark = placemarks?.first { self.zoomToPlaceMark(placemark) }
@@ -115,7 +121,7 @@ class PostLinkViewController: UIViewController
             
             ParseClient.sharedInstance().postStudentData(studentData, overwritingPreviousValue: shouldOverwritePreviousPost) { (error) in
                 self.showErrorWithTitle("Unable To Post Data", message: error.localizedDescription)
-                NSLog(error.description)
+                NSLog(error.description + "\n" + error.localizedDescription)
             }
             self.dismissViewControllerAnimated(true, completion: nil)
         }
@@ -154,7 +160,7 @@ class PostLinkViewController: UIViewController
             geocoder.reverseGeocodeLocation(currentLocation) { (placemarks, error) in
                 guard error == nil else {
                     self.showErrorWithTitle("Error Occurred", message: error!.localizedDescription)
-                    NSLog(error!.description)
+                    NSLog(error!.description + "\n" + error!.localizedDescription)
                     return
                 }
                 if let placemark = placemarks?.first { self.zoomToPlaceMark(placemark) }
@@ -162,7 +168,7 @@ class PostLinkViewController: UIViewController
                     let userInfo = [NSLocalizedDescriptionKey: "No placemarks returned."]
                     let newError = NSError(domain: "PostLinkViewController.useCurrentLocationTapped", code: 1, userInfo: userInfo)
                     self.showErrorWithTitle("Error Occurred", message: newError.localizedDescription)
-                    NSLog("\(newError.description)")
+                    NSLog(newError.description + "\n" + newError.localizedDescription)
                 }
             }
         }
@@ -191,19 +197,19 @@ class PostLinkViewController: UIViewController
     // MARK: - Private Methods
     private func transitionToMapView()
     {
-        [mapView, urlEntry, submitButton].forEach { $0.hidden = false }
+        for item in [mapView, urlEntry, submitButton] { item.hidden = false }
         UIView.animateWithDuration(0.5, animations: {
             self.view.backgroundColor = UIColor(hexValue: 0x3B5998)
             self.cancelButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-            [self.titleLabel, self.locationEntryField, self.findOnTheMapButton, self.useCurrentLocationButton].forEach {
-                $0.alpha = 0.0
+            for item in [self.titleLabel, self.locationEntryField, self.findOnTheMapButton, self.useCurrentLocationButton] {
+                item.alpha = 0.0
             }
-            [self.mapView, self.urlEntry, self.submitButton].forEach { $0.alpha = 1.0 }
-            [self.urlEntry, self.submitButton].forEach { $0.enabled = true }
-            [self.findOnTheMapButton, self.useCurrentLocationButton].forEach { $0.enabled = false }
+            for item in [self.mapView, self.urlEntry, self.submitButton] { item.alpha = 1.0 }
+            for item in [self.urlEntry, self.submitButton] { item.enabled = true }
+            for item in [self.findOnTheMapButton, self.useCurrentLocationButton] { item.enabled = false }
             }, completion: { didFinish in
-                [self.titleLabel, self.locationEntryField, self.findOnTheMapButton, self.useCurrentLocationButton].forEach {
-                    $0.hidden = true
+                for item in [self.titleLabel, self.locationEntryField, self.findOnTheMapButton, self.useCurrentLocationButton] {
+                    item.hidden = true
                 }
         })
     }
@@ -213,8 +219,13 @@ class PostLinkViewController: UIViewController
         transitionToMapView()
         let annotation = MKPointAnnotation()
         annotation.coordinate = placemark.location!.coordinate
-        annotation.title = placemark.name
-        locationEntryField.text = placemark.name
+        if locationEntryField.text == textFieldPlaceHolderText {
+            locationEntryField.text = placemark.name
+            annotation.title = placemark.name
+        }
+        else {
+            annotation.title = locationEntryField.text
+        }
         mapView.addAnnotation(annotation)
         mapView.setRegion(MKCoordinateRegionMakeWithDistance(placemark.location!.coordinate, 1000, 1000), animated: true)
     }

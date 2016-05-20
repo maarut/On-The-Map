@@ -73,7 +73,8 @@ struct StudentData
             try data = NSJSONSerialization.dataWithJSONObject(dict, options: NSJSONWritingOptions(rawValue: 0))
         }
         catch {
-            NSLog((error as NSError).localizedDescription)
+            let e = error as NSError
+            NSLog(e.description + "\n" + e.localizedDescription)
             data = NSData()
         }
         return data

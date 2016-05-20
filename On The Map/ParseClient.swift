@@ -101,7 +101,8 @@ class ParseClient
             json = try NSJSONSerialization.dataWithJSONObject(condition, options: NSJSONWritingOptions(rawValue: 0))
         }
         catch {
-            NSLog("Unable to JSONify dictionary \(condition)")
+            let e = error as NSError
+            NSLog("Unable to JSONify dictionary \(condition)\n\(e.description)\n\(e.localizedDescription)")
             json = nil
         }
         let conditionString = NSString(data: json, encoding: NSUTF8StringEncoding)!

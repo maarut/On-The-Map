@@ -104,7 +104,7 @@ extension MapViewController: CLLocationManagerDelegate
     
     func locationManager(manager: CLLocationManager, didFailWithError error: NSError)
     {
-        NSLog(error.localizedDescription)
+        NSLog(error.description + "\n" + error.localizedDescription)
     }
 }
 
