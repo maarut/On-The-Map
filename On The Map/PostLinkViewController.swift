@@ -83,15 +83,17 @@ class PostLinkViewController: UIViewController
             presentViewController(alert, animated: true, completion: nil)
             return
         }
+        findOnTheMapButton.enabled = false
         let geocoder = CLGeocoder()
         geocoder.geocodeAddressString(locationEntryField.text!) { (placemarks, error) in
+            self.findOnTheMapButton.enabled = true
             guard error == nil else {
+                self.showErrorWithTitle("Error Occured", message: error!.localizedDescription)
+                NSLog(error!.description)
                 return
             }
-            guard let placemarks = placemarks else {
-                return
-            }
-            if let placemark = placemarks.first { self.zoomToPlaceMark(placemark) }
+            if let placemark = placemarks?.first { self.zoomToPlaceMark(placemark) }
+            else { self.showErrorWithTitle("Error Occured", message: "No placemarks returned") }
         }
     }
     
@@ -113,6 +115,7 @@ class PostLinkViewController: UIViewController
             
             ParseClient.sharedInstance().postStudentData(studentData, overwritingPreviousValue: shouldOverwritePreviousPost) { (error) in
                 self.showErrorWithTitle("Unable To Post Data", message: error.localizedDescription)
+                NSLog(error.description)
             }
             self.dismissViewControllerAnimated(true, completion: nil)
         }
@@ -150,16 +153,17 @@ class PostLinkViewController: UIViewController
             let geocoder = CLGeocoder()
             geocoder.reverseGeocodeLocation(currentLocation) { (placemarks, error) in
                 guard error == nil else {
-                    NSLog("\(error!)\n\(error!.localizedDescription)")
+                    self.showErrorWithTitle("Error Occurred", message: error!.localizedDescription)
+                    NSLog(error!.description)
                     return
                 }
-                guard let placemarks = placemarks else {
+                if let placemark = placemarks?.first { self.zoomToPlaceMark(placemark) }
+                else {
                     let userInfo = [NSLocalizedDescriptionKey: "No placemarks returned."]
                     let newError = NSError(domain: "PostLinkViewController.useCurrentLocationTapped", code: 1, userInfo: userInfo)
-                    NSLog("\(newError)\n\(newError.localizedDescription)")
-                    return
+                    self.showErrorWithTitle("Error Occurred", message: newError.localizedDescription)
+                    NSLog("\(newError.description)")
                 }
-                if let placemark = placemarks.first { self.zoomToPlaceMark(placemark) }
             }
         }
         else {
