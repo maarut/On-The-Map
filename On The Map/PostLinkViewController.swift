@@ -22,11 +22,14 @@ class PostLinkViewController: UIViewController
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var findOnTheMapActivityIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var submitActivityIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var useCurrentLocationActivityIndicator: UIActivityIndicatorView!
     
     var shouldOverwritePreviousPost: Bool?
     private var textFieldPlaceHolderText = "Enter Location Here"
     private var canUseCurrentLocationButton = true
     private var locationManager = CLLocationManager()
+    private var task: NSURLSessionDataTask?
     
     // MARK: - Overrides
     override func viewDidLoad()
@@ -84,15 +87,18 @@ class PostLinkViewController: UIViewController
             presentViewController(alert, animated: true, completion: nil)
             return
         }
+        let buttonTitle = findOnTheMapButton.titleForState(.Normal)
         findOnTheMapButton.enabled = false
         findOnTheMapButton.setTitle("", forState: .Normal)
         findOnTheMapActivityIndicator.hidden = false
         findOnTheMapActivityIndicator.startAnimating()
+        useCurrentLocationButton.enabled = false
         let geocoder = CLGeocoder()
         geocoder.geocodeAddressString(locationEntryField.text!) { (placemarks, error) in
             self.findOnTheMapButton.enabled = true
-            self.findOnTheMapButton.setTitle("Find On The Map", forState: .Normal)
+            self.findOnTheMapButton.setTitle(buttonTitle, forState: .Normal)
             self.findOnTheMapActivityIndicator.stopAnimating()
+            self.useCurrentLocationButton.enabled = true
             guard error == nil else {
                 self.showErrorWithTitle("Error Occured", message: error!.localizedDescription)
                 NSLog(error!.description + "\n" + error!.localizedDescription)
@@ -109,43 +115,31 @@ class PostLinkViewController: UIViewController
             showErrorWithTitle("URL Not Provided", message: "A URL has not been provided and is required to post data. Please provide a URL.")
             return
         }
-        let postData: (user: UdacityUser, annotation: MKPointAnnotation, shouldOverridePreviousPost: Bool) -> Void = { (user, annotation, shouldOverwritePreviousPost) in
-            let studentData = StudentData(objectId: nil,
-                                          uniqueKey: "\(user.userId)",
-                                          firstName: user.firstName,
-                                          lastName: user.lastName,
-                                          mapString: annotation.title!,
-                                          mediaURL: self.urlEntry.text!,
-                                          latitude: Float(annotation.coordinate.latitude),
-                                          longitude: Float(annotation.coordinate.longitude))
-            
-            ParseClient.sharedInstance().postStudentData(studentData, overwritingPreviousValue: shouldOverwritePreviousPost) { (error) in
-                self.showErrorWithTitle("Unable To Post Data", message: error.localizedDescription)
-                NSLog(error.description + "\n" + error.localizedDescription)
-            }
-            self.dismissViewControllerAnimated(true, completion: nil)
-        }
         if let user = UdacityClient.sharedInstance().user, let annotation = mapView.annotations.first as? MKPointAnnotation {
             if shouldOverwritePreviousPost == nil {
                 switch StudentDataStore.currentlyLoggedInUsersPreviousPost {
                 case .HasPosted:
                     let alertController = UIAlertController(title: "Overwrite Previous Location?", message: "You have previously posted a location at which you're studying. Would you like to update that post, or would you like to post a new location?", preferredStyle: .Alert)
-                    let overwriteButton = UIAlertAction(title: "Overwrite", style: .Default, handler: { _ in postData(user: user, annotation: annotation, shouldOverridePreviousPost: true) })
-                    let newButton = UIAlertAction(title: "New", style: .Default, handler: { _ in postData(user: user, annotation: annotation, shouldOverridePreviousPost: true) })
+                    let overwriteButton = UIAlertAction(title: "Overwrite", style: .Default, handler: { _ in
+                        self.postDataForUser(user, annotation: annotation, overwritingPreviousPost: true)
+                    })
+                    let newButton = UIAlertAction(title: "New", style: .Default, handler: { _ in
+                        self.postDataForUser(user, annotation: annotation, overwritingPreviousPost: false)
+                    })
                     alertController.addAction(overwriteButton)
                     alertController.addAction(newButton)
                     presentViewController(alertController, animated: true, completion: nil)
                     break
                 case .Undetermined:
-                    postData(user: user, annotation: annotation, shouldOverridePreviousPost: true)
+                    postDataForUser(user, annotation: annotation, overwritingPreviousPost: true)
                     break
                 case .NeverPosted:
-                    postData(user: user, annotation: annotation, shouldOverridePreviousPost: false)
+                    postDataForUser(user, annotation: annotation, overwritingPreviousPost: false)
                     break
                 }
             }
             else {
-                postData(user: user, annotation: annotation, shouldOverridePreviousPost: shouldOverwritePreviousPost!)
+                postDataForUser(user, annotation: annotation, overwritingPreviousPost: shouldOverwritePreviousPost!)
             }
         }
         else {
@@ -156,8 +150,17 @@ class PostLinkViewController: UIViewController
     @IBAction func useCurrentLocationTapped(sender: AnyObject)
     {
         if let currentLocation = locationManager.location {
+            let buttonTitle = useCurrentLocationButton.titleForState(.Normal)
+            findOnTheMapButton.enabled = false
+            useCurrentLocationButton.enabled = false
+            useCurrentLocationButton.setTitle("", forState: .Normal)
+            useCurrentLocationActivityIndicator.startAnimating()
             let geocoder = CLGeocoder()
             geocoder.reverseGeocodeLocation(currentLocation) { (placemarks, error) in
+                self.findOnTheMapButton.enabled = true
+                self.useCurrentLocationButton.enabled = true
+                self.useCurrentLocationButton.setTitle(buttonTitle, forState: .Normal)
+                self.useCurrentLocationActivityIndicator.stopAnimating()
                 guard error == nil else {
                     self.showErrorWithTitle("Error Occurred", message: error!.localizedDescription)
                     NSLog(error!.description + "\n" + error!.localizedDescription)
@@ -179,6 +182,7 @@ class PostLinkViewController: UIViewController
     
     @IBAction func cancelTapped(sender: AnyObject)
     {
+        if let task = task { task.cancel() }
         dismissViewControllerAnimated(true, completion: nil)
     }
     
@@ -235,6 +239,38 @@ class PostLinkViewController: UIViewController
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .Alert)
         alertController.addAction(UIAlertAction(title: "Dismiss", style: .Default , handler: { _ in }))
         presentViewController(alertController, animated: true, completion: nil)
+    }
+    
+    private func postDataForUser(user: UdacityUser, annotation: MKPointAnnotation, overwritingPreviousPost: Bool)
+    {
+        let studentData = StudentData(objectId: nil,
+                                      uniqueKey: "\(user.userId)",
+                                      firstName: user.firstName,
+                                      lastName: user.lastName,
+                                      mapString: annotation.title!,
+                                      mediaURL: urlEntry.text!,
+                                      latitude: Float(annotation.coordinate.latitude),
+                                      longitude: Float(annotation.coordinate.longitude))
+        let buttonTitle = submitButton.titleForState(.Normal)
+        submitButton.enabled = false
+        submitButton.setTitle("", forState: .Normal)
+        submitActivityIndicator.startAnimating()
+        task = ParseClient.sharedInstance().postStudentData(studentData, overwritingPreviousValue: overwritingPreviousPost) { (didSucceed, error) in
+            onMainQueueDo {
+                self.submitButton.enabled = true
+                self.submitButton.setTitle(buttonTitle, forState: .Normal)
+                self.submitActivityIndicator.stopAnimating()
+                if didSucceed {
+                    self.dismissViewControllerAnimated(true, completion: nil)
+                }
+                else {
+                    if !self.isBeingDismissed() {
+                        self.showErrorWithTitle("Unable To Post Data", message: error!.localizedDescription)
+                    }
+                    NSLog(error!.description + "\n" + error!.localizedDescription)
+                }
+            }
+        }
     }
 }
 

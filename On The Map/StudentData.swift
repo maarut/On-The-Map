@@ -19,50 +19,72 @@ struct StudentData
     var latitude: Float
     var longitude: Float
     
+    init(objectId: String?, uniqueKey: String, firstName: String, lastName: String, mapString: String,
+         mediaURL: String, latitude: Float, longitude: Float)
+    {
+        self.objectId = objectId
+        self.uniqueKey = uniqueKey
+        self.firstName = firstName
+        self.lastName = lastName
+        self.mapString = mapString
+        self.mediaURL = mediaURL
+        self.latitude = latitude
+        self.longitude = longitude
+    }
+    
+    init?(data: [String: AnyObject]) throws
+    {
+        func throwError(errorMsg: String) throws
+        {
+            let userInfo = [NSLocalizedDescriptionKey: errorMsg]
+            throw NSError(domain: "StudentData.parseJSONData", code: 1, userInfo: userInfo)
+        }
+        guard let objectId = data[ParseClient.StudentDataFields.ObjectId] as? String else {
+            try throwError("Could not find key \"\(ParseClient.StudentDataFields.ObjectId)\"")
+            return nil
+        }
+        guard let uniqueKey = data[ParseClient.StudentDataFields.UniqueKey] as? String else {
+            try throwError("Could not find key \"\(ParseClient.StudentDataFields.UniqueKey)\"")
+            return nil
+        }
+        guard let firstName = data[ParseClient.StudentDataFields.FirstName] as? String else {
+            try throwError("Could not find key \"\(ParseClient.StudentDataFields.FirstName)\"")
+            return nil
+        }
+        guard let lastName = data[ParseClient.StudentDataFields.LastName] as? String else {
+            try throwError("Could not find key \"\(ParseClient.StudentDataFields.LastName)\"")
+            return nil
+        }
+        guard let mapString = data[ParseClient.StudentDataFields.MapString] as? String else {
+            try throwError("Could not find key \"\(ParseClient.StudentDataFields.MapString)\"")
+            return nil
+        }
+        guard let mediaURL = data[ParseClient.StudentDataFields.MediaURL] as? String else {
+            try throwError("Could not find key \"\(ParseClient.StudentDataFields.MediaURL)\"")
+            return nil
+        }
+        guard let latitude = data[ParseClient.StudentDataFields.Latitude] as? Float else {
+            try throwError("Could not find key \"\(ParseClient.StudentDataFields.Latitude)\"")
+            return nil
+        }
+        guard let longitude = data[ParseClient.StudentDataFields.Longitude] as? Float else {
+            try throwError("Could not find key \"\(ParseClient.StudentDataFields.Longitude)\"")
+            return nil
+        }
+        self.objectId = objectId
+        self.uniqueKey = uniqueKey
+        self.firstName = firstName
+        self.lastName = lastName
+        self.mapString = mapString
+        self.mediaURL = mediaURL
+        self.latitude = latitude
+        self.longitude = longitude
+        
+    }
+    
     static func parseJSONData(data: [[String: AnyObject]]) throws -> [StudentData]
     {
-        return try data.flatMap {
-            func throwError(errorMsg: String) throws
-            {
-                let userInfo = [NSLocalizedDescriptionKey: errorMsg]
-                throw NSError(domain: "StudentData.parseJSONData", code: 1, userInfo: userInfo)
-            }
-            guard let objectId = $0[ParseClient.StudentDataFields.ObjectId] as? String else {
-                try throwError("Could not find key \"\(ParseClient.StudentDataFields.ObjectId)\"")
-                return nil
-            }
-            guard let uniqueKey = $0[ParseClient.StudentDataFields.UniqueKey] as? String else {
-                try throwError("Could not find key \"\(ParseClient.StudentDataFields.UniqueKey)\"")
-                return nil
-            }
-            guard let firstName = $0[ParseClient.StudentDataFields.FirstName] as? String else {
-                try throwError("Could not find key \"\(ParseClient.StudentDataFields.FirstName)\"")
-                return nil
-            }
-            guard let lastName = $0[ParseClient.StudentDataFields.LastName] as? String else {
-                try throwError("Could not find key \"\(ParseClient.StudentDataFields.LastName)\"")
-                return nil
-            }
-            guard let mapString = $0[ParseClient.StudentDataFields.MapString] as? String else {
-                try throwError("Could not find key \"\(ParseClient.StudentDataFields.MapString)\"")
-                return nil
-            }
-            guard let mediaURL = $0[ParseClient.StudentDataFields.MediaURL] as? String else {
-                try throwError("Could not find key \"\(ParseClient.StudentDataFields.MediaURL)\"")
-                return nil
-            }
-            guard let latitude = $0[ParseClient.StudentDataFields.Latitude] as? Float else {
-                try throwError("Could not find key \"\(ParseClient.StudentDataFields.Latitude)\"")
-                return nil
-            }
-            guard let longitude = $0[ParseClient.StudentDataFields.Longitude] as? Float else {
-                try throwError("Could not find key \"\(ParseClient.StudentDataFields.Longitude)\"")
-                return nil
-            }
-            
-            return StudentData(objectId: objectId, uniqueKey: uniqueKey, firstName: firstName, lastName: lastName, mapString: mapString, mediaURL: mediaURL, latitude: latitude, longitude: longitude)
-            
-        }
+        return try data.flatMap { try StudentData(data: $0) }
     }
     
     func toJSON() -> NSData

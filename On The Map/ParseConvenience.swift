@@ -78,7 +78,9 @@ extension ParseClient
             }
             
             guard let statusCode = (response as? NSHTTPURLResponse)?.statusCode where statusCode >= 200 && statusCode < 300 else {
-                sendError("Status code in the 2xx range not received.")
+                let statusCode = (response as! NSHTTPURLResponse).statusCode
+                let response = NSHTTPURLResponse.localizedStringForStatusCode(statusCode)
+                sendError("Status code \"\(statusCode) - \(response)\" received.")
                 return
             }
             

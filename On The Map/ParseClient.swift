@@ -8,6 +8,11 @@
 
 import Foundation
 
+private func orderedDescending(string: String) -> String
+{
+    return "-\(string)"
+}
+
 class ParseClient
 {
     private (set) var session = NSURLSession.sharedSession()
@@ -25,30 +30,30 @@ class ParseClient
     // MARK: - Public Functions
     func getStudentData(completionHandler: ([StudentData]?, NSError?) -> Void)
     {
-        let options: [String: AnyObject] = [StudentDataParameters.Limit: 100, StudentDataParameters.Order: "-\(StudentDataFields.UpdatedAt)"]
+        let options: [String: AnyObject] = [StudentDataParameters.Limit: StudentDataStore.studentDataLimit,
+                                            StudentDataParameters.Order: orderedDescending(StudentDataFields.UpdatedAt)]
         getStudentDataWithOptions(options, completionHandler: completionHandler)
     }
     
-    func postStudentData(studentData: StudentData, overwritingPreviousValue: Bool, errorHandler: (NSError) -> Void)
+    func postStudentData(studentData: StudentData, overwritingPreviousValue: Bool, completionHandler: (Bool, NSError?) -> Void) -> NSURLSessionDataTask?
     {
         if !overwritingPreviousValue {
-            createStudentDataRemotely(studentData, errorHandler: errorHandler)
-            return
+            return createStudentDataRemotely(studentData, completionHandler: completionHandler)
         }
         if let oldValue = locallyCachedValueFor(studentData), objectId = oldValue.objectId {
-            updateStudentDataWithObjectId(objectId, withNewValue: studentData, errorHandler: errorHandler)
+            return updateStudentDataWithObjectId(objectId, withNewValue: studentData, completionHandler: completionHandler)
         }
         else {
-            searchRemotelyForStudentData(studentData) { (oldValue, error) in
+            return searchRemotelyForStudentData(studentData) { (oldValue, error) in
                 guard error == nil else {
-                    errorHandler(error!)
+                    completionHandler(false, error!)
                     return
                 }
                 if let oldValue = oldValue, objectId = oldValue.objectId {
-                    self.updateStudentDataWithObjectId(objectId, withNewValue: studentData, errorHandler: errorHandler)
+                    self.updateStudentDataWithObjectId(objectId, withNewValue: studentData, completionHandler: completionHandler)
                 }
                 else {
-                    self.createStudentDataRemotely(studentData, errorHandler: errorHandler)
+                    self.createStudentDataRemotely(studentData, completionHandler: completionHandler)
                 }
             }
         }
@@ -79,21 +84,29 @@ class ParseClient
     }
     
     // MARK: - Private Functions
-    private func createStudentDataRemotely(studentData: StudentData, errorHandler: (NSError) -> Void)
+    private func createStudentDataRemotely(studentData: StudentData, completionHandler: (Bool, NSError?) -> Void) -> NSURLSessionDataTask
     {
-        taskForPOSTMethod(Methods.StudentLocation, studentData: studentData) {
-            if $0.error != nil { errorHandler($0.error!) }
-        }.resume()
+        let task = taskForPOSTMethod(Methods.StudentLocation, studentData: studentData) {
+            if $0.error != nil { completionHandler(false, $0.error!) }
+            else { completionHandler(true, nil) }
+        }
+        task.resume()
+        return task
     }
     
-    private func updateStudentDataWithObjectId(objectId: String, withNewValue newValue: StudentData, errorHandler: (NSError) -> Void)
+    private func updateStudentDataWithObjectId(objectId: String, withNewValue newValue: StudentData, completionHandler: (Bool, NSError?) -> Void) -> NSURLSessionDataTask
     {
         let method = "\(Methods.StudentLocation)/\(objectId)"
-        let task = taskForPUTMethod(method, studentData: newValue) { if $0.error != nil { errorHandler($0.error!) } }
+        let task = taskForPUTMethod(method, studentData: newValue) {
+            if $0.error != nil { completionHandler(false, $0.error!) }
+            else { completionHandler(true, nil) }
+        }
         task.resume()
+        return task
     }
     
-    private func searchRemotelyForStudentData(studentData: StudentData, completionHandler: (StudentData?, NSError?) -> Void)
+    private func searchRemotelyForStudentData(
+        studentData: StudentData, completionHandler: (StudentData?, NSError?) -> Void) -> NSURLSessionDataTask
     {
         let condition: [String: AnyObject] = [StudentDataFields.UniqueKey: studentData.uniqueKey]
         let json: NSData!
@@ -106,7 +119,7 @@ class ParseClient
             json = nil
         }
         let conditionString = NSString(data: json, encoding: NSUTF8StringEncoding)!
-        getStudentDataWithOptions([StudentDataParameters.Where: conditionString]) { (searchResults, error) in
+        return getStudentDataWithOptions([StudentDataParameters.Where: conditionString]) { (searchResults, error) in
             guard error == nil else {
                 completionHandler(nil, error!)
                 return
@@ -133,13 +146,18 @@ class ParseClient
         return nil
     }
     
-    private func getStudentDataWithOptions(options: [String: AnyObject], completionHandler: ([StudentData]?, NSError?) -> Void)
+    private func getStudentDataWithOptions(options: [String: AnyObject], completionHandler: ([StudentData]?, NSError?) -> Void) -> NSURLSessionDataTask
     {
         let task = taskForGETMethod(Methods.StudentLocation, parameters: options) { (data, error) in
             func sendError(errorStr: String)
             {
                 let userInfo = [NSLocalizedDescriptionKey: errorStr]
                 completionHandler(nil, NSError(domain: "getStudentDataWithOptions", code: 1, userInfo: userInfo))
+            }
+            
+            guard error == nil else {
+                completionHandler(nil, error)
+                return
             }
             
             guard let data = data as? [String: AnyObject] else {
@@ -165,5 +183,6 @@ class ParseClient
             
         }
         task.resume()
+        return task
     }
 }

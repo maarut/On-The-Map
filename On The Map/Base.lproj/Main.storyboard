@@ -349,30 +349,39 @@ Cg
                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="PLW-d6-a4A">
                                 <rect key="frame" x="290" y="529" width="20" height="20"/>
                             </activityIndicatorView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="vUk-rZ-PF1">
+                                <rect key="frame" x="290" y="529" width="20" height="20"/>
+                            </activityIndicatorView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="v0w-q8-2bS">
+                                <rect key="frame" x="290" y="567" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="s8b-Fx-gHy" firstAttribute="trailing" secondItem="rR9-Hr-XIf" secondAttribute="trailing" id="2Cd-Ua-6UY"/>
-                            <constraint firstItem="PLW-d6-a4A" firstAttribute="centerX" secondItem="G2w-5j-x3r" secondAttribute="centerX" id="3ZI-op-4BQ"/>
                             <constraint firstItem="G2w-5j-x3r" firstAttribute="centerX" secondItem="d7o-wM-3Jw" secondAttribute="centerX" id="6GW-Md-Prk"/>
                             <constraint firstItem="fyc-ou-4hE" firstAttribute="top" secondItem="oCW-Lr-RWc" secondAttribute="top" id="6iC-Df-Ys8"/>
                             <constraint firstItem="rR9-Hr-XIf" firstAttribute="trailing" secondItem="fyc-ou-4hE" secondAttribute="trailing" id="AwJ-qA-gHm"/>
                             <constraint firstItem="509-nc-OVZ" firstAttribute="width" secondItem="G2w-5j-x3r" secondAttribute="width" id="BZn-EK-55w"/>
                             <constraint firstItem="fyc-ou-4hE" firstAttribute="leading" secondItem="oCW-Lr-RWc" secondAttribute="leading" id="Fu5-BY-v5K"/>
                             <constraint firstItem="PLW-d6-a4A" firstAttribute="centerX" secondItem="509-nc-OVZ" secondAttribute="centerX" id="GkS-dD-1r9"/>
+                            <constraint firstItem="v0w-q8-2bS" firstAttribute="centerY" secondItem="FdG-3a-WdB" secondAttribute="centerY" id="HDh-l4-rT4"/>
                             <constraint firstItem="FdG-3a-WdB" firstAttribute="centerX" secondItem="d7o-wM-3Jw" secondAttribute="centerX" id="HeP-lB-KFe"/>
                             <constraint firstItem="yob-Aw-K1F" firstAttribute="top" secondItem="Znz-KP-N70" secondAttribute="bottom" id="Ogq-S9-8Qn"/>
                             <constraint firstItem="FdG-3a-WdB" firstAttribute="width" secondItem="G2w-5j-x3r" secondAttribute="width" id="POV-au-W2g"/>
                             <constraint firstItem="rR9-Hr-XIf" firstAttribute="top" secondItem="fyc-ou-4hE" secondAttribute="bottom" constant="8" symbolic="YES" id="Q6c-yE-Yfd"/>
                             <constraint firstItem="G2w-5j-x3r" firstAttribute="top" secondItem="rR9-Hr-XIf" secondAttribute="bottom" constant="8" symbolic="YES" id="QrG-zv-MRT"/>
                             <constraint firstItem="FdG-3a-WdB" firstAttribute="top" secondItem="G2w-5j-x3r" secondAttribute="bottom" constant="8" symbolic="YES" id="RpS-km-n7R"/>
+                            <constraint firstItem="vUk-rZ-PF1" firstAttribute="centerX" secondItem="G2w-5j-x3r" secondAttribute="centerX" id="VL3-Vp-HBS"/>
+                            <constraint firstItem="vUk-rZ-PF1" firstAttribute="centerY" secondItem="G2w-5j-x3r" secondAttribute="centerY" id="W0F-if-0fY"/>
                             <constraint firstItem="G2w-5j-x3r" firstAttribute="centerX" secondItem="d7o-wM-3Jw" secondAttribute="centerX" id="W2E-Z6-TyC"/>
                             <constraint firstItem="rR9-Hr-XIf" firstAttribute="leading" secondItem="fyc-ou-4hE" secondAttribute="leading" id="WLL-be-vIk"/>
                             <constraint firstItem="509-nc-OVZ" firstAttribute="centerX" secondItem="d7o-wM-3Jw" secondAttribute="centerX" id="ajx-eD-lMp"/>
                             <constraint firstItem="PLW-d6-a4A" firstAttribute="centerY" secondItem="509-nc-OVZ" secondAttribute="centerY" id="b5Y-LN-K0N"/>
                             <constraint firstItem="fyc-ou-4hE" firstAttribute="trailing" secondItem="oCW-Lr-RWc" secondAttribute="trailing" id="bAj-SJ-csG"/>
                             <constraint firstItem="s8b-Fx-gHy" firstAttribute="leading" secondItem="rR9-Hr-XIf" secondAttribute="leading" id="bnR-KB-zMb"/>
+                            <constraint firstItem="v0w-q8-2bS" firstAttribute="centerX" secondItem="FdG-3a-WdB" secondAttribute="centerX" id="hdw-Lt-gs6"/>
                             <constraint firstItem="s8b-Fx-gHy" firstAttribute="top" secondItem="rR9-Hr-XIf" secondAttribute="top" id="hjL-TE-q6c"/>
                             <constraint firstItem="rR9-Hr-XIf" firstAttribute="top" secondItem="oCW-Lr-RWc" secondAttribute="bottom" constant="8" symbolic="YES" id="i9e-Iv-CfT"/>
                             <constraint firstItem="W6S-zj-tA4" firstAttribute="top" secondItem="FdG-3a-WdB" secondAttribute="bottom" constant="8" symbolic="YES" id="iBu-Nk-pzk"/>
@@ -383,11 +392,6 @@ Cg
                             <constraint firstItem="509-nc-OVZ" firstAttribute="top" secondItem="rR9-Hr-XIf" secondAttribute="bottom" constant="8" symbolic="YES" id="xCP-vB-XNC"/>
                             <constraint firstAttribute="trailing" secondItem="oCW-Lr-RWc" secondAttribute="trailing" id="zLj-MX-Jfj"/>
                         </constraints>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="3ZI-op-4BQ"/>
-                            </mask>
-                        </variation>
                         <connections>
                             <outletCollection property="gestureRecognizers" destination="LSG-n1-tHp" appends="YES" id="Tw6-74-NcY"/>
                         </connections>
@@ -399,9 +403,11 @@ Cg
                         <outlet property="findOnTheMapButton" destination="509-nc-OVZ" id="maN-pz-x2x"/>
                         <outlet property="locationEntryField" destination="s8b-Fx-gHy" id="hRs-yG-5QO"/>
                         <outlet property="mapView" destination="rR9-Hr-XIf" id="2gW-O9-d1z"/>
+                        <outlet property="submitActivityIndicator" destination="vUk-rZ-PF1" id="J7M-1M-XQi"/>
                         <outlet property="submitButton" destination="G2w-5j-x3r" id="Eey-LM-moN"/>
                         <outlet property="titleLabel" destination="oCW-Lr-RWc" id="0iK-1K-okl"/>
                         <outlet property="urlEntry" destination="fyc-ou-4hE" id="cMb-mI-O3S"/>
+                        <outlet property="useCurrentLocationActivityIndicator" destination="v0w-q8-2bS" id="szW-RW-Zpt"/>
                         <outlet property="useCurrentLocationButton" destination="FdG-3a-WdB" id="hGa-FX-qos"/>
                     </connections>
                 </viewController>

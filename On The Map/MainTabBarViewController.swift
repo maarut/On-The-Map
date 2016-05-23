@@ -36,7 +36,7 @@ class MainTabBarViewController: UITabBarController
         navigationController?.navigationBarHidden = false
         StudentDataStore.refreshStudentDataWithCompletionHandler { (didSucceed, error) in
             if !didSucceed {
-                NSLog(error!.description + "\n" + error!.localizedDescription)
+                onMainQueueDo { self.showErrorWithTitle("Data Fetch Error", error: error!) }
                 return
             }
             if let selectedVC = self.selectedViewController as? TabBarCommonOperations {
@@ -90,7 +90,7 @@ class MainTabBarViewController: UITabBarController
             let newButton = UIAlertAction(title: "New", style: .Default, handler: { _ in displayPostLocationVCOverridingExistingPostOnSubmit(false) })
             alertController.addAction(overwriteButton)
             alertController.addAction(newButton)
-            self.presentViewController(alertController, animated: true, completion: nil)
+            presentViewController(alertController, animated: true, completion: nil)
             break
         }
     }
